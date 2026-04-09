@@ -1,856 +1,394 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>InspireVibes Now - Milestones & Giveaways</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      background: #0a0e27;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      color: #e8eaf6;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.15), transparent 50%),
-                  radial-gradient(circle at 80% 80%, rgba(255, 138, 101, 0.1), transparent 50%),
-                  radial-gradient(circle at 40% 20%, rgba(79, 172, 254, 0.1), transparent 50%);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-      position: relative;
-      z-index: 1;
-    }
-    .hero {
-      text-align: center;
-      padding: 3rem 1rem 4rem 1rem;
-      position: relative;
-    }
-    .logo {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 20px;
-      margin: 0 auto 1.5rem auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
-    }
-    .hero h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.8rem;
-      letter-spacing: -0.5px;
-    }
-    .hero-subtitle {
-      font-size: 1.25rem;
-      color: #b0b8d4;
-      font-weight: 400;
-    }
-    .nav-pills {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-bottom: 3rem;
-      flex-wrap: wrap;
-    }
-    .nav-pill {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #b0b8d4;
-      padding: 0.9rem 2rem;
-      border-radius: 50px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      outline: none;
-    }
-    .nav-pill:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-    }
-    .nav-pill.active {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-color: transparent;
-      color: white;
-      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-    }
-    .section {
-      display: none;
-      animation: fadeInUp 0.5s ease-out;
-    }
-    .section.active {
-      display: block;
-    }
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    .milestone-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
-    }
-    .milestone-card {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 2rem;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-    .milestone-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      transform: scaleX(0);
-      transition: transform 0.4s ease;
-    }
-    .milestone-card:hover::before {
-      transform: scaleX(1);
-    }
-    .milestone-card:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.2);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
-    }
-    .milestone-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
-    }
-    .milestone-icon {
-      font-size: 2.5rem;
-    }
-    .status-badge {
-      padding: 0.4rem 1rem;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .status-completed {
-      background: rgba(46, 213, 115, 0.15);
-      color: #2ed573;
-      border: 1px solid rgba(46, 213, 115, 0.3);
-    }
-    .status-upcoming {
-      background: rgba(79, 172, 254, 0.15);
-      color: #4facfe;
-      border: 1px solid rgba(79, 172, 254, 0.3);
-    }
-    .status-planned {
-      background: rgba(165, 94, 234, 0.15);
-      color: #a55eea;
-      border: 1px solid rgba(165, 94, 234, 0.3);
-    }
-    .milestone-title {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 1rem;
-    }
-    .milestone-prize {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #ffd93d;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .info-box {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1rem;
-      border-left: 3px solid #667eea;
-    }
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #b0b8d4;
-      font-size: 0.95rem;
-      margin-bottom: 0.5rem;
-    }
-    .info-row:last-child {
-      margin-bottom: 0;
-    }
-    .info-label {
-      font-weight: 500;
-    }
-    .info-value {
-      font-weight: 700;
-      color: #ffffff;
-    }
-    .secret-gift-box {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-      border: 1px solid rgba(102, 126, 234, 0.3);
-      border-radius: 16px;
-      padding: 1.25rem;
-      text-align: center;
-      margin: 1.5rem 0;
-      position: relative;
-      overflow: hidden;
-    }
-    .secret-gift-box::before {
-      content: '✨';
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      font-size: 1.5rem;
-      opacity: 0.3;
-    }
-    .secret-gift-box::after {
-      content: '✨';
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      font-size: 1.5rem;
-      opacity: 0.3;
-    }
-    .secret-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #ffd93d;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-    .secret-text {
-      color: #e8eaf6;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-    .steps-container {
-      margin-top: 1.5rem;
-    }
-    .step-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      padding: 0.75rem;
-      background: rgba(0, 0, 0, 0.15);
-      border-radius: 12px;
-      transition: background 0.3s;
-    }
-    .step-item:hover {
-      background: rgba(0, 0, 0, 0.25);
-    }
-    .step-number {
-      min-width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: white;
-    }
-    .step-text {
-      color: #b0b8d4;
-      font-size: 0.95rem;
-      padding-top: 0.3rem;
-    }
-    .gift-showcase {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-    }
-    .gift-item {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 1.5rem;
-      text-align: center;
-      transition: all 0.3s;
-    }
-    .gift-item:hover {
-      background: rgba(255, 255, 255, 0.06);
-      transform: scale(1.05);
-    }
-    .gift-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.75rem;
-    }
-    .gift-name {
-      font-weight: 600;
-      color: #ffffff;
-      margin-bottom: 0.5rem;
-    }
-    .gift-value {
-      color: #2ed573;
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-    .footer-cta {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 3rem 2rem;
-      text-align: center;
-      margin-top: 4rem;
-    }
-    .footer-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 1rem;
-    }
-    .footer-text {
-      color: #b0b8d4;
-      font-size: 1.1rem;
-      line-height: 1.6;
-      margin-bottom: 2rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .tags {
-      display: flex;
-      gap: 0.75rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-    .tag {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 0.5rem 1.25rem;
-      border-radius: 50px;
-      color: #b0b8d4;
-      font-size: 0.9rem;
-      font-weight: 500;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .cta-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 1.1rem 2.5rem;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 1.1rem;
-      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
-      transition: all 0.3s;
-    }
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(102, 126, 234, 0.6);
-    }
-    .feature-list {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-top: 2rem;
-    }
-    .feature-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.75rem 0;
-      color: #b0b8d4;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    .feature-item:last-child {
-      border-bottom: none;
-    }
-    .feature-icon {
-      font-size: 1.5rem;
-    }
-    .winner-profile-section {
-      margin: 1.5rem 0;
-    }
-    .winner-profile-card {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 16px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem;
-      transition: all 0.3s ease;
-    }
-    .winner-profile-card:hover {
-      background: rgba(0, 0, 0, 0.3);
-      transform: translateX(5px);
-    }
-    .profile-avatar {
-      position: relative;
-      flex-shrink: 0;
-    }
-    .profile-img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 3px solid rgba(102, 126, 234, 0.5);
-      object-fit: cover;
-    }
-    .profile-rank {
-      position: absolute;
-      bottom: -3px;
-      right: -3px;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 0.7rem;
-      color: white;
-      border: 2px solid #0a0e27;
-    }
-    .rank-1 {
-      background: linear-gradient(135deg, #ffd93d 0%, #ff9a00 100%);
-      box-shadow: 0 4px 16px rgba(255, 217, 61, 0.5);
-    }
-    .rank-2 {
-      background: linear-gradient(135deg, #c0c0c0 0%, #8c8c8c 100%);
-      box-shadow: 0 4px 16px rgba(192, 192, 192, 0.5);
-    }
-    .rank-3 {
-      background: linear-gradient(135deg, #cd7f32 0%, #a0522d 100%);
-      box-shadow: 0 4px 16px rgba(205, 127, 50, 0.5);
-    }
-    .profile-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    .profile-name {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #ffffff;
-    }
-    .profile-stats {
-      display: flex;
-      gap: 2rem;
-    }
-    .profile-stat {
-      text-align: left;
-    }
-    .profile-stat-value {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #ffd93d;
-    }
-    .profile-stat-label {
-      font-size: 0.8rem;
-      color: #b0b8d4;
-      margin-top: 0.15rem;
-    }
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2rem;
-      }
-      .milestone-grid {
-        grid-template-columns: 1fr;
-      }
-      .winner-profile-card {
-        flex-direction: column;
-        text-align: center;
-      }
-      .profile-info {
-        align-items: center;
-      }
-      .profile-stats {
-        justify-content: center;
-      }
-      .profile-stat {
-        text-align: center;
-      }
-      .nav-pills {
-        gap: 0.75rem;
-      }
-      .nav-pill {
-        padding: 0.7rem 1.5rem;
-        font-size: 0.9rem;
-      }
-      .footer-cta {
-        padding: 2rem 1.5rem;
-      }
-    }
 
- <!-- Text box inside the card -->
- .image-profile-card {
-  background: #181e27;
-  border-radius: 16px;
-  box-shadow: 0 4px 32px rgba(15, 20, 41, 0.35);
-  padding: 12px;
-  margin: 20px auto;
-  max-width: 420px;        /* similar width to an IG portrait on mobile */
-  width: 100%;
-  box-sizing: border-box;
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#06080f;color:#f0f2ff;overflow-x:hidden;min-height:100vh}
+
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(159,122,234,0.6)}70%{box-shadow:0 0 0 18px rgba(159,122,234,0)}100%{box-shadow:0 0 0 0 rgba(159,122,234,0)}}
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+@keyframes pop-in{0%{opacity:0;transform:scale(0.7) translateY(30px)}80%{transform:scale(1.04)}100%{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes slide-right{from{width:0}to{width:var(--w,60%)}}
+@keyframes bounce-in{0%{opacity:0;transform:scale(0.3)}50%{transform:scale(1.15)}70%{transform:scale(0.95)}100%{opacity:1;transform:scale(1)}}
+@keyframes glow-text{0%,100%{text-shadow:0 0 10px rgba(200,160,255,0.4)}50%{text-shadow:0 0 30px rgba(200,160,255,0.9),0 0 60px rgba(200,160,255,0.4)}}
+@keyframes particle-float{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-120px) rotate(720deg);opacity:0}}
+@keyframes twinkle{0%,100%{opacity:0.2;transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}
+@keyframes slide-up-fade{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes crown-bounce{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+@keyframes fire{0%,100%{transform:scale(1) skewX(-2deg)}50%{transform:scale(1.1) skewX(2deg)}}
+@keyframes orbit{from{transform:rotate(0deg) translateX(40px) rotate(0deg)}to{transform:rotate(360deg) translateX(40px) rotate(-360deg)}}
+
+.page{max-width:900px;margin:0 auto;padding:20px 16px 60px}
+
+/* === HERO === */
+.hero{text-align:center;padding:60px 20px 40px;position:relative}
+.hero-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:24px}
+.orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.18}
+.orb1{width:300px;height:300px;background:#7c3aed;top:-80px;left:-60px;animation:float 6s ease-in-out infinite}
+.orb2{width:250px;height:250px;background:#ec4899;top:20px;right:-40px;animation:float 8s ease-in-out infinite 2s}
+.orb3{width:200px;height:200px;background:#06b6d4;bottom:-40px;left:40%;animation:float 7s ease-in-out infinite 1s}
+.star-field{position:absolute;inset:0}
+.star{position:absolute;width:2px;height:2px;background:white;border-radius:50%;animation:twinkle var(--dur,3s) ease-in-out infinite var(--del,0s)}
+
+.logo-wrap{display:inline-flex;align-items:center;justify-content:center;width:90px;height:90px;border-radius:26px;background:linear-gradient(135deg,#7c3aed,#a855f7,#ec4899);margin-bottom:20px;animation:pulse-ring 2.5s ease-out infinite;position:relative;z-index:1}
+.logo-inner{font-size:38px;animation:float 3s ease-in-out infinite}
+.hero-title{font-size:clamp(2rem,6vw,3.8rem);font-weight:900;line-height:1.1;margin-bottom:10px;animation:glow-text 3s ease-in-out infinite;position:relative;z-index:1}
+.hero-title span{background:linear-gradient(135deg,#c084fc,#f0abfc,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:1.1rem;color:#94a3b8;position:relative;z-index:1;margin-bottom:30px}
+.stats-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.stat-pill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:50px;padding:8px 20px;font-size:0.88rem;color:#c4b5fd;font-weight:600;display:flex;align-items:center;gap:6px;transition:all 0.3s}
+.stat-pill:hover{background:rgba(124,58,237,0.2);border-color:rgba(167,139,250,0.4);transform:translateY(-2px)}
+.stat-dot{width:8px;height:8px;border-radius:50%;background:#a855f7;display:inline-block;animation:pulse-ring 2s ease-out infinite}
+
+/* === TABS === */
+.tabs{display:flex;gap:8px;margin:30px 0 28px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:6px;flex-wrap:wrap}
+.tab{flex:1;min-width:120px;padding:12px 10px;border-radius:12px;background:transparent;border:none;color:#64748b;font-size:0.9rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.tab:hover{color:#c4b5fd;background:rgba(167,139,250,0.1)}
+.tab.on{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;box-shadow:0 4px 20px rgba(124,58,237,0.5)}
+.tab-icon{font-size:16px}
+
+/* === SECTIONS === */
+.sec{animation:slide-up-fade 0.45s cubic-bezier(0.22,1,0.36,1) both}
+
+/* === CURRENT MILESTONE === */
+.milestone-hero{background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.12),rgba(236,72,153,0.1));border:1px solid rgba(167,139,250,0.25);border-radius:24px;padding:36px 32px;margin-bottom:24px;position:relative;overflow:hidden;text-align:center}
+.milestone-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(124,58,237,0.12);animation:float 5s ease-in-out infinite}
+.milestone-hero::after{content:'';position:absolute;bottom:-30px;left:-30px;width:150px;height:150px;border-radius:50%;background:rgba(236,72,153,0.08);animation:float 7s ease-in-out infinite 2s}
+.milestone-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,0.3);border:1px solid rgba(167,139,250,0.4);border-radius:50px;padding:6px 16px;font-size:0.8rem;font-weight:700;color:#c4b5fd;letter-spacing:0.5px;margin-bottom:18px;animation:bounce-in 0.6s cubic-bezier(0.22,1,0.36,1)}
+.milestone-badge-dot{width:6px;height:6px;border-radius:50%;background:#a855f7;animation:pulse-ring 1.5s ease-out infinite}
+.milestone-number{font-size:clamp(2.5rem,8vw,5rem);font-weight:900;background:linear-gradient(135deg,#c084fc,#f0abfc,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:8px;position:relative;z-index:1;animation:pop-in 0.7s cubic-bezier(0.22,1,0.36,1)}
+.milestone-label{font-size:1.2rem;color:#94a3b8;margin-bottom:24px;position:relative;z-index:1}
+.milestone-prize-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(234,179,8,0.15);border:1px solid rgba(234,179,8,0.3);border-radius:12px;padding:12px 24px;font-size:1.3rem;font-weight:800;color:#fbbf24;margin-bottom:28px;position:relative;z-index:1;animation:bounce-in 0.8s cubic-bezier(0.22,1,0.36,1) 0.2s both}
+
+.progress-section{position:relative;z-index:1;max-width:500px;margin:0 auto}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.progress-label{font-size:0.88rem;color:#94a3b8;font-weight:600}
+.progress-pct{font-size:0.88rem;color:#c4b5fd;font-weight:700}
+.progress-track{height:12px;background:rgba(255,255,255,0.08);border-radius:50px;overflow:visible;position:relative;margin-bottom:8px}
+.progress-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,#7c3aed,#a855f7,#ec4899);position:relative;width:0;animation:slide-right 1.4s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;--w:42%}
+.progress-glow{position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:#a855f7;box-shadow:0 0 12px 4px rgba(168,85,247,0.7);animation:pulse-ring 1.5s ease-out infinite}
+.progress-sub{display:flex;justify-content:space-between;font-size:0.78rem;color:#475569}
+
+.detail-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:24px}
+.detail-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px;text-align:center;transition:all 0.35s;position:relative;overflow:hidden}
+.detail-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,58,237,0),rgba(168,85,247,0.12));opacity:0;transition:opacity 0.3s}
+.detail-card:hover{transform:translateY(-4px);border-color:rgba(167,139,250,0.3)}
+.detail-card:hover::before{opacity:1}
+.detail-icon{font-size:28px;margin-bottom:8px;display:block;animation:float 4s ease-in-out infinite}
+.detail-val{font-size:1.4rem;font-weight:800;color:#f0f2ff;margin-bottom:3px}
+.detail-key{font-size:0.78rem;color:#64748b;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
+
+.secret-reveal{background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(236,72,153,0.1));border:1px solid rgba(167,139,250,0.2);border-radius:16px;padding:20px 24px;margin-top:20px;text-align:center;position:relative;overflow:hidden}
+.secret-reveal::before{content:'✦';position:absolute;top:10px;left:14px;font-size:14px;color:rgba(167,139,250,0.3);animation:spin-slow 8s linear infinite}
+.secret-reveal::after{content:'✦';position:absolute;bottom:10px;right:14px;font-size:14px;color:rgba(236,72,153,0.3);animation:spin-slow 6s linear infinite reverse}
+.secret-title{font-size:1rem;font-weight:700;color:#fbbf24;margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:6px}
+.secret-body{font-size:0.9rem;color:#94a3b8;line-height:1.6}
+
+/* === UPCOMING === */
+.upcoming-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.ucard{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:24px;transition:all 0.35s;position:relative;overflow:hidden}
+.ucard::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(168,85,247,0.05));opacity:0;transition:opacity 0.3s;pointer-events:none}
+.ucard:hover{transform:translateY(-6px);border-color:rgba(167,139,250,0.25);box-shadow:0 20px 40px rgba(0,0,0,0.4)}
+.ucard:hover::after{opacity:1}
+.ucard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.ucard-icon{font-size:32px;line-height:1;animation:float 4s ease-in-out infinite}
+.ubadge{padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.ubadge-soon{background:rgba(79,172,254,0.15);color:#60a5fa;border:1px solid rgba(96,165,250,0.25)}
+.ubadge-plan{background:rgba(124,58,237,0.15);color:#a78bfa;border:1px solid rgba(167,139,250,0.25)}
+.ucard-title{font-size:1.5rem;font-weight:800;color:#f0f2ff;margin-bottom:6px}
+.ucard-prize{font-size:1.05rem;font-weight:700;color:#fbbf24;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.ucard-info{background:rgba(0,0,0,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.ucard-row{display:flex;justify-content:space-between;font-size:0.85rem;padding:4px 0}
+.ucard-row-label{color:#64748b}
+.ucard-row-val{color:#f0f2ff;font-weight:600}
+.ucard-note{font-size:0.82rem;color:#475569;font-style:italic;line-height:1.5}
+
+/* === PRIZE POOL === */
+.prize-section-title{text-align:center;font-size:1.6rem;font-weight:800;margin-bottom:24px;background:linear-gradient(135deg,#c084fc,#f0abfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.gift-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:24px}
+.gift-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 14px;text-align:center;transition:all 0.35s;cursor:default}
+.gift-card:hover{background:rgba(124,58,237,0.12);border-color:rgba(167,139,250,0.3);transform:scale(1.06)}
+.gift-card:hover .gift-icon{animation:fire 0.5s ease-in-out infinite}
+.gift-icon{font-size:32px;margin-bottom:10px;display:block;transition:all 0.3s}
+.gift-name{font-size:0.88rem;font-weight:600;color:#f0f2ff;margin-bottom:4px}
+.gift-val{font-size:1rem;font-weight:800;color:#34d399}
+.feature-list{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden}
+.feat-row{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background 0.25s}
+.feat-row:last-child{border-bottom:none}
+.feat-row:hover{background:rgba(124,58,237,0.08)}
+.feat-ico{font-size:20px;flex-shrink:0;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(124,58,237,0.15)}
+.feat-text{font-size:0.9rem;color:#94a3b8}
+
+/* === WINNERS === */
+.winners-section-head{text-align:center;margin-bottom:28px}
+.winners-crown{font-size:48px;animation:crown-bounce 2s ease-in-out infinite;display:inline-block;margin-bottom:12px}
+.winners-title{font-size:2rem;font-weight:800;background:linear-gradient(135deg,#fbbf24,#f59e0b,#fcd34d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.winners-sub{font-size:0.95rem;color:#64748b}
+
+.contest-banner{background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(236,72,153,0.1));border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.contest-badge{background:rgba(46,213,115,0.12);border:1px solid rgba(46,213,115,0.25);border-radius:50px;padding:5px 14px;font-size:0.8rem;font-weight:700;color:#34d399;letter-spacing:0.5px;white-space:nowrap}
+.contest-info{flex:1}
+.contest-title{font-size:1.1rem;font-weight:700;color:#f0f2ff;margin-bottom:4px}
+.contest-meta{display:flex;gap:16px;flex-wrap:wrap}
+.contest-date{font-size:0.83rem;color:#64748b;display:flex;align-items:center;gap:4px}
+
+.winner-block{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;margin-bottom:18px;transition:all 0.35s}
+.winner-block:hover{border-color:rgba(167,139,250,0.25);background:rgba(124,58,237,0.07)}
+.winner-row{display:flex;align-items:center;gap:18px}
+.winner-avatar-wrap{position:relative;flex-shrink:0}
+.winner-img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(124,58,237,0.5);display:block;transition:all 0.35s}
+.winner-block:hover .winner-img{border-color:rgba(167,139,250,0.8);box-shadow:0 0 20px rgba(124,58,237,0.5)}
+.rank-badge{position:absolute;bottom:-4px;right:-4px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:900;color:#fff;border:2px solid #06080f;background:linear-gradient(135deg,#fbbf24,#f59e0b);box-shadow:0 2px 10px rgba(251,191,36,0.6)}
+.winner-body{flex:1}
+.winner-name{font-size:1.15rem;font-weight:800;color:#f0f2ff;margin-bottom:2px}
+.winner-handle{font-size:0.85rem;color:#7c3aed;margin-bottom:10px;font-weight:600}
+.winner-prize-row{display:flex;align-items:baseline;gap:8px}
+.winner-prize-val{font-size:1.4rem;font-weight:900;color:#fbbf24}
+.winner-prize-lbl{font-size:0.78rem;color:#64748b;font-weight:500}
+.winner-trophy{font-size:2.2rem;flex-shrink:0;animation:crown-bounce 2s ease-in-out infinite}
+
+.others-box{background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(236,72,153,0.07));border:1px solid rgba(167,139,250,0.15);border-radius:16px;padding:16px 20px;margin-bottom:18px;text-align:center}
+.others-title{font-size:1rem;font-weight:700;color:#fbbf24;margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:6px}
+.others-text{font-size:0.88rem;color:#94a3b8;line-height:1.6;margin-bottom:14px}
+.winner-photo-wrap{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);max-width:420px;margin:0 auto}
+.winner-photo{display:block;width:100%;object-fit:contain}
+
+.all-received{background:rgba(46,213,115,0.08);border:1px solid rgba(46,213,115,0.18);border-radius:14px;padding:16px 20px;text-align:center;margin-top:16px}
+.all-received-title{font-size:0.95rem;font-weight:700;color:#34d399;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:6px}
+.all-received-text{font-size:0.85rem;color:#64748b}
+
+/* === FLOATING PARTICLES === */
+.particles{position:fixed;inset:0;pointer-events:none;z-index:99;overflow:hidden}
+.particle{position:absolute;border-radius:50%;animation:particle-float var(--dur,3s) ease-out forwards var(--del,0s);opacity:0;width:var(--sz,6px);height:var(--sz,6px);background:var(--col,#a855f7)}
+
+/* === FOOTER === */
+.footer{background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(236,72,153,0.08));border:1px solid rgba(255,255,255,0.07);border-radius:24px;padding:40px 24px;text-align:center;margin-top:40px}
+.footer h2{font-size:1.6rem;font-weight:800;color:#f0f2ff;margin-bottom:10px}
+.footer p{font-size:0.95rem;color:#64748b;max-width:500px;margin:0 auto 20px;line-height:1.7}
+.hashtags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:24px}
+.hashtag{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:50px;padding:6px 14px;font-size:0.82rem;color:#94a3b8;transition:all 0.3s}
+.hashtag:hover{background:rgba(124,58,237,0.2);border-color:rgba(167,139,250,0.3);color:#c4b5fd;transform:translateY(-2px)}
+.visit-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#7c3aed,#a855f7,#ec4899);color:#fff;padding:14px 32px;border-radius:50px;text-decoration:none;font-weight:700;font-size:1rem;box-shadow:0 8px 30px rgba(124,58,237,0.45);transition:all 0.35s}
+.visit-btn:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(124,58,237,0.65)}
+.btn-icon{font-size:18px}
+
+@media(max-width:560px){
+  .winner-row{flex-direction:column;text-align:center}
+  .winner-trophy{margin:0 auto}
+  .contest-banner{flex-direction:column}
+  .tabs{gap:4px}
+  .tab{font-size:0.82rem;padding:10px 6px}
 }
+</style>
 
-.milestone-img {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  aspect-ratio: 2 / 2;     /* Instagram portrait ratio */
-  height: auto;
-  object-fit: contain;     /* keep full image so text is readable */
-  border-radius: 12px;
-}
+<div class="particles" id="ptcl"></div>
 
+<div class="page">
 
-.winner-profile-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-/* right side as a row: text + trophy */
-.profile-right {
-  display: flex;
-  justify-content: space-between;  /* pushes trophy to far right */
-  align-items: center;
-  width: 100%;
-}
-
-/* stack text nicely */
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-/* trophy look */
-.profile-trophy {
-  font-size: 28px;
-  margin-left: 16px;
-}
-
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="hero">
-      <div class="logo">🌟</div>
-      <h1>InspireVibes Now</h1>
-      <p class="hero-subtitle">Milestone Celebrations & Exclusive Giveaways</p>
+  <div class="hero">
+    <div class="hero-bg">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+      <div class="star-field" id="sf"></div>
     </div>
-
-    <div class="nav-pills">
-      <button class="nav-pill active" onclick="switchSection(0)">Winners</button>
-      <button class="nav-pill" onclick="switchSection(1)">Current Milestone</button>
-      <button class="nav-pill" onclick="switchSection(2)">Upcoming</button>
-      <button class="nav-pill" onclick="switchSection(3)">Prize Pool</button>
+    <div class="logo-wrap"><div class="logo-inner">🌟</div></div>
+    <h1 class="hero-title"><span>InspireVibes Now</span></h1>
+    <p class="hero-sub">Milestone Celebrations &amp; Exclusive Giveaways</p>
+    <div class="stats-row">
+      <div class="stat-pill"><span class="stat-dot"></span> Live Milestones</div>
+      <div class="stat-pill">✦ Real Prizes</div>
+      <div class="stat-pill">💖 Growing Community</div>
     </div>
-
-    <div id="section-0" class="section active">
-      <div class="milestone-grid">
-        <div class="milestone-card">
-          <div class="milestone-header">
-            <div class="milestone-icon">🎉</div>
-            <div class="status-badge status-completed">Completed</div>
-          </div>
-          <h2 class="milestone-title">1K+ Views Milestone</h2>
-          <div class="milestone-prize">🏆 Winners Announced</div>
-          
-          <div class="info-box">
-            <div class="info-row">
-              <span class="info-label">Contest Ended:</span>
-              <span class="info-value">30 Nov, 2025</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Announced:</span>
-              <span class="info-value">1 Dec, 2025</span>
-            </div>
-          </div>
-
-     <div class="winner-profile-card winner-1-card">
-  <div class="profile-avatar">
-    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjW3PRSLLIdUQIi72_-rwUkvXBLES082__Nga55v4AWKCzlMKkUs6WBi8SUtO1tfPLJXOUObvDULJDxGF7Ky7g-V_Wy5Hdl6Wi2N8tJoj1qnFjjgG4qYouiXCGSz-emlrtbBixzh6Kg6wMPxs-izqxknFRySkWVCZXQGBI5DJX52MioxAxL4KZ9AHi8-MuV/s150/1.jpg" alt="Winner 1" class="profile-img">
-    <div class="profile-rank rank-1">1st</div>
   </div>
 
-  <!-- Right side: text + trophy -->
-  <div class="profile-right">
-    <div class="profile-info">
-      <div class="profile-name">@princyangle_08</div>
-      <div class="profile-stat-label">Sushmita uniyal ❣️</div>
-      <div class="profile-stats">
-        <div class="profile-stat">
-          <div class="profile-stat-value">₹1,000</div>
-          <div class="profile-stat-label">Cash Prize</div>
+  <div class="tabs">
+    <button class="tab on" onclick="sw(0,this)"><span class="tab-icon">🚀</span>Current Milestone</button>
+    <button class="tab" onclick="sw(1,this)"><span class="tab-icon">🌠</span>Upcoming</button>
+    <button class="tab" onclick="sw(2,this)"><span class="tab-icon">🎁</span>Prize Pool</button>
+    <button class="tab" onclick="sw(3,this)"><span class="tab-icon">🏆</span>Winners</button>
+  </div>
+
+  <div id="s0" class="sec">
+    <div class="milestone-hero">
+      <div class="milestone-badge"><span class="milestone-badge-dot"></span> CURRENT MILESTONE</div>
+      <div class="milestone-number">5,000</div>
+      <div class="milestone-label">Followers Goal 🎯</div>
+      <div class="milestone-prize-tag">💎 ₹5,000+ Worth of Gifts</div>
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-label">Progress to 5K followers</span>
+          <span class="progress-pct">42%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill"><div class="progress-glow"></div></div>
+        </div>
+        <div class="progress-sub"><span>Getting there!</span><span>5,000 🎯</span></div>
+      </div>
+    </div>
+    <div class="detail-cards">
+      <div class="detail-card"><span class="detail-icon">🏆</span><div class="detail-val">5</div><div class="detail-key">Lucky Winners</div></div>
+      <div class="detail-card"><span class="detail-icon">💰</span><div class="detail-val">₹5,000+</div><div class="detail-key">Total Prize Value</div></div>
+      <div class="detail-card"><span class="detail-icon">🎯</span><div class="detail-val">5,000</div><div class="detail-key">Follower Goal</div></div>
+      <div class="detail-card"><span class="detail-icon">📢</span><div class="detail-val">Soon™</div><div class="detail-key">Announcement</div></div>
+    </div>
+    <div class="secret-reveal">
+      <div class="secret-title">🎁 Secret Gift for All Participants</div>
+      <div class="secret-body">A surprise gift awaits every participant — revealed only on announcement day. Stay tuned!</div>
+    </div>
+    <p style="text-align:center;font-size:0.85rem;color:#475569;font-style:italic;margin-top:18px">Complete entry requirements will be shared once we hit this milestone. Follow us to not miss out!</p>
+  </div>
+
+  <div id="s1" class="sec" style="display:none">
+    <div class="upcoming-grid">
+      <div class="ucard">
+        <div class="ucard-top"><span class="ucard-icon">🌠</span><span class="ubadge ubadge-soon">Upcoming</span></div>
+        <div class="ucard-title">10,000 Followers</div>
+        <div class="ucard-prize">🏆 ₹10,000+ Worth Gifts</div>
+        <div class="ucard-info">
+          <div class="ucard-row"><span class="ucard-row-label">Winners</span><span class="ucard-row-val">10 Lucky Winners</span></div>
+        </div>
+        <div class="secret-reveal" style="margin:0"><div class="secret-title" style="font-size:0.9rem">🎁 Secret Gift for All</div><div class="secret-body" style="font-size:0.82rem">Revealed on announcement day</div></div>
+        <p class="ucard-note" style="margin-top:12px">Details announced when milestone is reached.</p>
+      </div>
+      <div class="ucard">
+        <div class="ucard-top"><span class="ucard-icon">🌟</span><span class="ubadge ubadge-soon">Upcoming</span></div>
+        <div class="ucard-title">15,000 Followers</div>
+        <div class="ucard-prize">⭐ ₹15,000+ Worth Gifts</div>
+        <div class="ucard-info">
+          <div class="ucard-row"><span class="ucard-row-label">Winners</span><span class="ucard-row-val">10 Lucky Winners</span></div>
+        </div>
+        <div class="secret-reveal" style="margin:0"><div class="secret-title" style="font-size:0.9rem">🎁 Secret Gift for All</div><div class="secret-body" style="font-size:0.82rem">Revealed on announcement day</div></div>
+        <p class="ucard-note" style="margin-top:12px">Details announced when milestone is reached.</p>
+      </div>
+      <div class="ucard">
+        <div class="ucard-top"><span class="ucard-icon">💎</span><span class="ubadge ubadge-plan">Planned</span></div>
+        <div class="ucard-title">Future Milestones</div>
+        <div class="ucard-prize">🎊 Exciting Prize Pool</div>
+        <div class="secret-reveal" style="margin:0"><div class="secret-title" style="font-size:0.9rem">🎁 Secret Gift for All</div><div class="secret-body" style="font-size:0.82rem">Revealed on announcement day</div></div>
+        <p class="ucard-note" style="margin-top:12px">Stay connected for bigger milestones &amp; incredible prizes!</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="s2" class="sec" style="display:none">
+    <div class="prize-section-title">🎁 Prize Pool &amp; Gift Categories</div>
+    <div class="gift-grid">
+      <div class="gift-card"><span class="gift-icon">👕</span><div class="gift-name">Premium T-Shirt</div><div class="gift-val">₹500</div></div>
+      <div class="gift-card"><span class="gift-icon">☕</span><div class="gift-name">Designer Mug</div><div class="gift-val">₹500</div></div>
+      <div class="gift-card"><span class="gift-icon">🧥</span><div class="gift-name">Branded Hoodie</div><div class="gift-val">₹2,000</div></div>
+      <div class="gift-card"><span class="gift-icon">👜</span><div class="gift-name">Ladies Handbag</div><div class="gift-val">₹2,000</div></div>
+      <div class="gift-card"><span class="gift-icon">🎁</span><div class="gift-name">Premium Items</div><div class="gift-val">Up to ₹10,000</div></div>
+      <div class="gift-card"><span class="gift-icon">✨</span><div class="gift-name">Secret Gift</div><div class="gift-val" style="color:#fbbf24">For All</div></div>
+    </div>
+    <div class="feature-list">
+      <div class="feat-row"><div class="feat-ico">🏆</div><div class="feat-text">Multiple wins possible across different milestones</div></div>
+      <div class="feat-row"><div class="feat-ico">🎊</div><div class="feat-text">Secret participation gift revealed only on announcement day</div></div>
+      <div class="feat-row"><div class="feat-ico">💎</div><div class="feat-text">Premium prizes valued up to ₹10,000 for major milestones</div></div>
+      <div class="feat-row"><div class="feat-ico">📢</div><div class="feat-text">Complete gift lists announced with every milestone</div></div>
+    </div>
+  </div>
+
+  <div id="s3" class="sec" style="display:none">
+    <div class="winners-section-head">
+      <div class="winners-crown">👑</div>
+      <div class="winners-title">Hall of Winners</div>
+      <div class="winners-sub">Celebrating our amazing community members</div>
+    </div>
+
+    <div class="contest-banner">
+      <div class="contest-badge">✓ COMPLETED</div>
+      <div class="contest-info">
+        <div class="contest-title">1K+ Views Milestone Giveaway</div>
+        <div class="contest-meta">
+          <span class="contest-date">🗓 Ended: 30 Nov, 2025</span>
+          <span class="contest-date">📢 Announced: 1 Dec, 2025</span>
         </div>
       </div>
     </div>
 
-    <!-- Trophy at the end -->
-    <div class="profile-trophy">🏆</div>
+    <div class="winner-block">
+      <div class="winner-row">
+        <div class="winner-avatar-wrap">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjW3PRSLLIdUQIi72_-rwUkvXBLES082__Nga55v4AWKCzlMKkUs6WBi8SUtO1tfPLJXOUObvDULJDxGF7Ky7g-V_Wy5Hdl6Wi2N8tJoj1qnFjjgG4qYouiXCGSz-emlrtbBixzh6Kg6wMPxs-izqxknFRySkWVCZXQGBI5DJX52MioxAxL4KZ9AHi8-MuV/s150/1.jpg" alt="Winner" class="winner-img">
+          <div class="rank-badge">1st</div>
+        </div>
+        <div class="winner-body">
+          <div class="winner-name">Sushmita Uniyal ❣️</div>
+          <div class="winner-handle">@princyangle_08</div>
+          <div class="winner-prize-row">
+            <span class="winner-prize-val">₹1,000</span>
+            <span class="winner-prize-lbl">Cash Prize</span>
+          </div>
+        </div>
+        <div class="winner-trophy">🏆</div>
+      </div>
+    </div>
+
+    <div class="others-box">
+      <div class="others-title">🎁 Other 5 Winners</div>
+      <div class="others-text">Each received a Secret Gift of <strong style="color:#fbbf24">₹200 cash</strong> &amp; <strong style="color:#fbbf24">₹100 Amazon Gift Voucher</strong></div>
+      <div class="winner-photo-wrap">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiO2UNi1Q7BfLbbs7fiW-IVhXwAE8WWSSyap4YBROK-DQcm8EgHrHgUDbXIYQWYkTT66G0qfxSSbQKLv9k3O0SVIakw1fuQ0oeivRYP0YdEaOaneJz188uqNTiSJXHobPVnDwg-BBhV_QY95By-jYZlgluuEUb7jvpcskVOC1ndYJbi_e_tsCmLvgnsFFr9/s1280/WhatsApp%20Image%202025-12-01%20at%201.10.12%20AM.jpeg" alt="Winners Group" class="winner-photo">
+      </div>
+    </div>
+
+    <div class="all-received">
+      <div class="all-received-title">🎁 All Participants Received a Secret Gift</div>
+      <div class="all-received-text">Thank you to everyone who participated! All gifts have been sent via DM. 💖</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <h2>Join Our Growing Community 💖</h2>
+    <p>Thank you for being part of this journey. Every follower helps us build a space where we inspire each other every single day.</p>
+    <div class="hashtags">
+      <span class="hashtag">#InspireVibesNow</span>
+      <span class="hashtag">#Giveaway</span>
+      <span class="hashtag">#MotivationDaily</span>
+      <span class="hashtag">#CommunityGrowth</span>
+    </div>
+    <a href="https://instagram.com/inspirevibes.now" target="_blank" class="visit-btn">
+      <span class="btn-icon">📱</span> Visit @inspirevibes.now
+    </a>
   </div>
 </div>
 
-  <!-- Inserted image as a card -->
-  <div class="image-profile-card">
- <div class="secret-gift-box">
-            <div class="secret-title"></div>
-            <p class="secret-text">🎁 Other 5 Winners who Received Secret Gifts of ₹200 cash & ₹100 Amazon Gift Voucher </p>
-        
+<script>
+const sf=document.getElementById('sf');
+for(let i=0;i<80;i++){
+  const s=document.createElement('div');s.className='star';
+  s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--del:${Math.random()*5}s`;
+  sf.appendChild(s);
+}
 
-    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiO2UNi1Q7BfLbbs7fiW-IVhXwAE8WWSSyap4YBROK-DQcm8EgHrHgUDbXIYQWYkTT66G0qfxSSbQKLv9k3O0SVIakw1fuQ0oeivRYP0YdEaOaneJz188uqNTiSJXHobPVnDwg-BBhV_QY95By-jYZlgluuEUb7jvpcskVOC1ndYJbi_e_tsCmLvgnsFFr9/s1280/WhatsApp%20Image%202025-12-01%20at%201.10.12%20AM.jpeg" alt="Milestone Banner" class="milestone-img">
-  </div>  </div>
-           
-          <div class="secret-gift-box">
-            <div class="secret-title">🎁 All Participants Received Secret Gift</div>
-            <p class="secret-text">Thank you to everyone who participated! All gifts have been sent via DM.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+function sw(idx,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.sec').forEach((s,i)=>{
+    s.style.display=i===idx?'block':'none';
+    if(i===idx){s.style.animation='none';requestAnimationFrame(()=>{s.style.animation='';s.className='sec'}); }
+  });
+  if(idx===0){
+    setTimeout(()=>{
+      const pf=document.querySelector('#s0 .progress-fill');
+      if(pf){pf.style.animation='none';requestAnimationFrame(()=>{pf.style.animation='slide-right 1.4s cubic-bezier(0.22,1,0.36,1) 0.1s forwards'}); }
+    },50);
+  }
+  spawnParticles();
+}
 
-    <div id="section-1" class="section">
-      <div class="milestone-grid">
-        <div class="milestone-card">
-          <div class="milestone-header">
-            <div class="milestone-icon">🚀</div>
-            <div class="status-badge status-upcoming">Upcoming</div>
-          </div>
-          <h2 class="milestone-title">1,500 Followers</h2>
-          <div class="milestone-prize">💎 ₹3,000+ Worth Gifts</div>
-          <div class="info-box">
-            <div class="info-row">
-              <span class="info-label">Winners:</span>
-              <span class="info-value">3 Lucky Winners Receive ₹1000</span>
-              <span class="info-label">Other:</span>
-              <span class="info-value">3 Lucky Winners Receive Gifts from Gifts Categories</span>
-            </div>
-          </div>
-          <div class="secret-gift-box">
-            <div class="secret-title">🎁 Secret Gift for All</div>
-            <p class="secret-text">Will be revealed on result announcement day</p>
-          </div>
-          <p style="color:#b0b8d4; font-style:italic; margin-top:1rem;">Complete details and entry requirements will be announced when we reach this milestone</p>
-        </div> </div>
+function spawnParticles(){
+  const cols=['#a855f7','#ec4899','#67e8f9','#fbbf24','#34d399'];
+  const container=document.getElementById('ptcl');
+  for(let i=0;i<14;i++){
+    const p=document.createElement('div');p.className='particle';
+    const sz=4+Math.random()*8;
+    p.style.cssText=`left:${Math.random()*100}%;bottom:20%;--dur:${1.5+Math.random()*2}s;--del:${Math.random()*0.8}s;--sz:${sz}px;--col:${cols[Math.floor(Math.random()*cols.length)]};`;
+    container.appendChild(p);
+    setTimeout(()=>p.remove(),(3+Math.random()*2)*1000);
+  }
+}
 
-
-
-
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="section-1" class="section">
-      <div class="milestone-grid">
-        <div class="milestone-card">
-          <div class="milestone-header">
-            <div class="milestone-icon">🚀</div>
-            <div class="status-badge status-upcoming">Upcoming</div>
-          </div>
-          <h2 class="milestone-title">5,000 Followers</h2>
-          <div class="milestone-prize">💎 ₹5,000+ Worth Gifts</div>
-    <div class="info-box">
-            <div class="info-row">
-              <span class="info-label">Winners:</span>
-              <span class="info-value">5 Lucky Winners</span>
-            </div>
-          </div>
-          <div class="secret-gift-box">
-            <div class="secret-title">🎁 Secret Gift for All</div>
-            <p class="secret-text">Will be revealed on result announcement day</p>
-          </div>
-          <p style="color:#b0b8d4; font-style:italic; margin-top:1rem;">Complete details and entry requirements will be announced when we reach this milestone</p>
-        </div>
-
-        <div class="milestone-card">
-          <div class="milestone-header">
-            <div class="milestone-icon">🌠</div>
-            <div class="status-badge status-upcoming">Upcoming</div>
-          </div>
-          <h2 class="milestone-title">10,000 Followers</h2>
-          <div class="milestone-prize">🏆 ₹10,000+ Worth Gifts</div>
-          <div class="info-box">
-            <div class="info-row">
-              <span class="info-label">Winners:</span>
-              <span class="info-value">10 Lucky Winners</span>
-            </div>
-          </div>
-          <div class="secret-gift-box">
-            <div class="secret-title">🎁 Secret Gift for All</div>
-            <p class="secret-text">Will be revealed on result announcement day</p>
-          </div>
-          <p style="color:#b0b8d4; font-style:italic; margin-top:1rem;">Complete details and entry requirements will be announced when we reach this milestone</p>
-        </div>
-
-        <div class="milestone-card">
-          <div class="milestone-header">
-            <div class="milestone-icon">🌟</div>
-            <div class="status-badge status-upcoming">Upcoming</div>
-          </div>
-          <h2 class="milestone-title">15,000 Followers</h2>
-          <div class="milestone-prize">⭐ ₹15,000+ Worth Gifts</div>
-          <div class="info-box">
-            <div class="info-row">
-              <span class="info-label">Winners:</span>
-              <span class="info-value">10 Lucky Winners</span>
-            </div>
-          </div>
-          <div class="secret-gift-box">
-            <div class="secret-title">🎁 Secret Gift for All</div>
-            <p class="secret-text">Will be revealed on result announcement day</p>
-          </div>
-          <p style="color:#b0b8d4; font-style:italic; margin-top:1rem;">Complete details and entry requirements will be announced when we reach this milestone</p>
-        </div>
-
-        <div class="milestone-card">
-          <div class="milestone-header">
-            <div class="milestone-icon">💎</div>
-            <div class="status-badge status-planned">Planned</div>
-          </div>
-          <h2 class="milestone-title">Future Milestones</h2>
-          <div class="milestone-prize">🎊 Exciting Prize Pool</div>
-          <div class="secret-gift-box">
-            <div class="secret-title">🎁 Secret Gift for All</div>
-            <p class="secret-text">Will be revealed on result announcement day</p>
-          </div>
-          <p style="color:#b0b8d4; font-style:italic; margin-top:1rem;">Stay connected for announcements about bigger milestones and incredible prizes</p>
-        </div>
-      </div>
-    </div>
-
-    <div id="section-2" class="section">
-      <div class="milestone-card">
-        <h2 class="milestone-title" style="text-align:center; margin-bottom:2rem;">🎁 Prize Pool & Gift Categories</h2>
-        
-        <div class="gift-showcase">
-          <div class="gift-item">
-            <div class="gift-icon">👕</div>
-            <div class="gift-name">Premium T-Shirt</div>
-            <div class="gift-value">₹500</div>
-          </div>
-          <div class="gift-item">
-            <div class="gift-icon">☕</div>
-            <div class="gift-name">Designer Mug</div>
-            <div class="gift-value">₹500</div>
-          </div>
-          <div class="gift-item">
-            <div class="gift-icon">🧥</div>
-            <div class="gift-name">Branded Hoodie</div>
-            <div class="gift-value">₹2,000</div>
-          </div>
-          <div class="gift-item">
-            <div class="gift-icon">👜</div>
-            <div class="gift-name">Ladies Hand Bag</div>
-            <div class="gift-value">₹2,000</div>
-          </div>
-          <div class="gift-item">
-            <div class="gift-icon">🎁</div>
-            <div class="gift-name">Premium Items</div>
-            <div class="gift-value">Up to ₹10,000</div>
-          </div>
-          <div class="gift-item">
-            <div class="gift-icon">✨</div>
-            <div class="gift-name">Secret Gift</div>
-            <div class="gift-value" style="color:#ffd93d;">For All</div>
-          </div>
-        </div>
-
-        <div class="feature-list">
-          <div class="feature-item">
-            <div class="feature-icon">🏆</div>
-            <div>Multiple wins possible across different milestones</div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-icon">🎊</div>
-            <div>Secret participation gift revealed on announcement day</div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-icon">💎</div>
-            <div>Premium prizes valued up to ₹10,000 for major milestones</div>
-          </div>
-          <div class="feature-item">
-            <div class="feature-icon">📢</div>
-            <div>Complete gift lists announced with each milestone</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer-cta">
-      <h2 class="footer-title">Join Our Growing Community 💖</h2>
-      <p class="footer-text">Thank you for being part of our journey. Every member contributes to building this motivational community where we inspire each other daily.</p>
-      
-      <div class="tags">
-        <span class="tag">#InspireVibesNow</span>
-        <span class="tag">#Giveaway</span>
-        <span class="tag">#MotivationDaily</span>
-        <span class="tag">#CommunityGrowth</span>
-      </div>
-
-      <a href="https://instagram.com/inspirevibes.now" target="_blank" class="cta-button">
-        <span>📱</span>
-        <span>Visit @inspirevibes.now</span>
-      </a>
-    </div>
-  </div>
-
-  <script>
-    function switchSection(index) {
-      document.querySelectorAll('.nav-pill').forEach((pill, i) => {
-        pill.classList.toggle('active', i === index);
-      });
-      document.querySelectorAll('.section').forEach((section, i) => {
-        section.classList.toggle('active', i === index);
-      });
-    }
-  </script>
-</body>
-</html>
+setTimeout(spawnParticles,800);
+</script>
