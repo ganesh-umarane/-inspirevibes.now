@@ -1,394 +1,149 @@
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:#06080f;color:#f0f2ff;overflow-x:hidden;min-height:100vh}
-
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(159,122,234,0.6)}70%{box-shadow:0 0 0 18px rgba(159,122,234,0)}100%{box-shadow:0 0 0 0 rgba(159,122,234,0)}}
-@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
-@keyframes pop-in{0%{opacity:0;transform:scale(0.7) translateY(30px)}80%{transform:scale(1.04)}100%{opacity:1;transform:scale(1) translateY(0)}}
-@keyframes slide-right{from{width:0}to{width:var(--w,60%)}}
-@keyframes bounce-in{0%{opacity:0;transform:scale(0.3)}50%{transform:scale(1.15)}70%{transform:scale(0.95)}100%{opacity:1;transform:scale(1)}}
-@keyframes glow-text{0%,100%{text-shadow:0 0 10px rgba(200,160,255,0.4)}50%{text-shadow:0 0 30px rgba(200,160,255,0.9),0 0 60px rgba(200,160,255,0.4)}}
-@keyframes particle-float{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-120px) rotate(720deg);opacity:0}}
-@keyframes twinkle{0%,100%{opacity:0.2;transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}
-@keyframes slide-up-fade{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
-@keyframes crown-bounce{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(5deg)}}
-@keyframes fire{0%,100%{transform:scale(1) skewX(-2deg)}50%{transform:scale(1.1) skewX(2deg)}}
-@keyframes orbit{from{transform:rotate(0deg) translateX(40px) rotate(0deg)}to{transform:rotate(360deg) translateX(40px) rotate(-360deg)}}
-
-.page{max-width:900px;margin:0 auto;padding:20px 16px 60px}
-
-/* === HERO === */
-.hero{text-align:center;padding:60px 20px 40px;position:relative}
-.hero-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:24px}
-.orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.18}
-.orb1{width:300px;height:300px;background:#7c3aed;top:-80px;left:-60px;animation:float 6s ease-in-out infinite}
-.orb2{width:250px;height:250px;background:#ec4899;top:20px;right:-40px;animation:float 8s ease-in-out infinite 2s}
-.orb3{width:200px;height:200px;background:#06b6d4;bottom:-40px;left:40%;animation:float 7s ease-in-out infinite 1s}
-.star-field{position:absolute;inset:0}
-.star{position:absolute;width:2px;height:2px;background:white;border-radius:50%;animation:twinkle var(--dur,3s) ease-in-out infinite var(--del,0s)}
-
-.logo-wrap{display:inline-flex;align-items:center;justify-content:center;width:90px;height:90px;border-radius:26px;background:linear-gradient(135deg,#7c3aed,#a855f7,#ec4899);margin-bottom:20px;animation:pulse-ring 2.5s ease-out infinite;position:relative;z-index:1}
-.logo-inner{font-size:38px;animation:float 3s ease-in-out infinite}
-.hero-title{font-size:clamp(2rem,6vw,3.8rem);font-weight:900;line-height:1.1;margin-bottom:10px;animation:glow-text 3s ease-in-out infinite;position:relative;z-index:1}
-.hero-title span{background:linear-gradient(135deg,#c084fc,#f0abfc,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:1.1rem;color:#94a3b8;position:relative;z-index:1;margin-bottom:30px}
-.stats-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
-.stat-pill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:50px;padding:8px 20px;font-size:0.88rem;color:#c4b5fd;font-weight:600;display:flex;align-items:center;gap:6px;transition:all 0.3s}
-.stat-pill:hover{background:rgba(124,58,237,0.2);border-color:rgba(167,139,250,0.4);transform:translateY(-2px)}
-.stat-dot{width:8px;height:8px;border-radius:50%;background:#a855f7;display:inline-block;animation:pulse-ring 2s ease-out infinite}
-
-/* === TABS === */
-.tabs{display:flex;gap:8px;margin:30px 0 28px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:6px;flex-wrap:wrap}
-.tab{flex:1;min-width:120px;padding:12px 10px;border-radius:12px;background:transparent;border:none;color:#64748b;font-size:0.9rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
-.tab:hover{color:#c4b5fd;background:rgba(167,139,250,0.1)}
-.tab.on{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;box-shadow:0 4px 20px rgba(124,58,237,0.5)}
-.tab-icon{font-size:16px}
-
-/* === SECTIONS === */
-.sec{animation:slide-up-fade 0.45s cubic-bezier(0.22,1,0.36,1) both}
-
-/* === CURRENT MILESTONE === */
-.milestone-hero{background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(168,85,247,0.12),rgba(236,72,153,0.1));border:1px solid rgba(167,139,250,0.25);border-radius:24px;padding:36px 32px;margin-bottom:24px;position:relative;overflow:hidden;text-align:center}
-.milestone-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(124,58,237,0.12);animation:float 5s ease-in-out infinite}
-.milestone-hero::after{content:'';position:absolute;bottom:-30px;left:-30px;width:150px;height:150px;border-radius:50%;background:rgba(236,72,153,0.08);animation:float 7s ease-in-out infinite 2s}
-.milestone-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,0.3);border:1px solid rgba(167,139,250,0.4);border-radius:50px;padding:6px 16px;font-size:0.8rem;font-weight:700;color:#c4b5fd;letter-spacing:0.5px;margin-bottom:18px;animation:bounce-in 0.6s cubic-bezier(0.22,1,0.36,1)}
-.milestone-badge-dot{width:6px;height:6px;border-radius:50%;background:#a855f7;animation:pulse-ring 1.5s ease-out infinite}
-.milestone-number{font-size:clamp(2.5rem,8vw,5rem);font-weight:900;background:linear-gradient(135deg,#c084fc,#f0abfc,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:8px;position:relative;z-index:1;animation:pop-in 0.7s cubic-bezier(0.22,1,0.36,1)}
-.milestone-label{font-size:1.2rem;color:#94a3b8;margin-bottom:24px;position:relative;z-index:1}
-.milestone-prize-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(234,179,8,0.15);border:1px solid rgba(234,179,8,0.3);border-radius:12px;padding:12px 24px;font-size:1.3rem;font-weight:800;color:#fbbf24;margin-bottom:28px;position:relative;z-index:1;animation:bounce-in 0.8s cubic-bezier(0.22,1,0.36,1) 0.2s both}
-
-.progress-section{position:relative;z-index:1;max-width:500px;margin:0 auto}
-.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.progress-label{font-size:0.88rem;color:#94a3b8;font-weight:600}
-.progress-pct{font-size:0.88rem;color:#c4b5fd;font-weight:700}
-.progress-track{height:12px;background:rgba(255,255,255,0.08);border-radius:50px;overflow:visible;position:relative;margin-bottom:8px}
-.progress-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,#7c3aed,#a855f7,#ec4899);position:relative;width:0;animation:slide-right 1.4s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;--w:42%}
-.progress-glow{position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:#a855f7;box-shadow:0 0 12px 4px rgba(168,85,247,0.7);animation:pulse-ring 1.5s ease-out infinite}
-.progress-sub{display:flex;justify-content:space-between;font-size:0.78rem;color:#475569}
-
-.detail-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:24px}
-.detail-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:18px;text-align:center;transition:all 0.35s;position:relative;overflow:hidden}
-.detail-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,58,237,0),rgba(168,85,247,0.12));opacity:0;transition:opacity 0.3s}
-.detail-card:hover{transform:translateY(-4px);border-color:rgba(167,139,250,0.3)}
-.detail-card:hover::before{opacity:1}
-.detail-icon{font-size:28px;margin-bottom:8px;display:block;animation:float 4s ease-in-out infinite}
-.detail-val{font-size:1.4rem;font-weight:800;color:#f0f2ff;margin-bottom:3px}
-.detail-key{font-size:0.78rem;color:#64748b;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
-
-.secret-reveal{background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(236,72,153,0.1));border:1px solid rgba(167,139,250,0.2);border-radius:16px;padding:20px 24px;margin-top:20px;text-align:center;position:relative;overflow:hidden}
-.secret-reveal::before{content:'✦';position:absolute;top:10px;left:14px;font-size:14px;color:rgba(167,139,250,0.3);animation:spin-slow 8s linear infinite}
-.secret-reveal::after{content:'✦';position:absolute;bottom:10px;right:14px;font-size:14px;color:rgba(236,72,153,0.3);animation:spin-slow 6s linear infinite reverse}
-.secret-title{font-size:1rem;font-weight:700;color:#fbbf24;margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:6px}
-.secret-body{font-size:0.9rem;color:#94a3b8;line-height:1.6}
-
-/* === UPCOMING === */
-.upcoming-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
-.ucard{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:24px;transition:all 0.35s;position:relative;overflow:hidden}
-.ucard::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(168,85,247,0.05));opacity:0;transition:opacity 0.3s;pointer-events:none}
-.ucard:hover{transform:translateY(-6px);border-color:rgba(167,139,250,0.25);box-shadow:0 20px 40px rgba(0,0,0,0.4)}
-.ucard:hover::after{opacity:1}
-.ucard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
-.ucard-icon{font-size:32px;line-height:1;animation:float 4s ease-in-out infinite}
-.ubadge{padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
-.ubadge-soon{background:rgba(79,172,254,0.15);color:#60a5fa;border:1px solid rgba(96,165,250,0.25)}
-.ubadge-plan{background:rgba(124,58,237,0.15);color:#a78bfa;border:1px solid rgba(167,139,250,0.25)}
-.ucard-title{font-size:1.5rem;font-weight:800;color:#f0f2ff;margin-bottom:6px}
-.ucard-prize{font-size:1.05rem;font-weight:700;color:#fbbf24;margin-bottom:14px;display:flex;align-items:center;gap:6px}
-.ucard-info{background:rgba(0,0,0,0.2);border-radius:10px;padding:12px 14px;margin-bottom:14px}
-.ucard-row{display:flex;justify-content:space-between;font-size:0.85rem;padding:4px 0}
-.ucard-row-label{color:#64748b}
-.ucard-row-val{color:#f0f2ff;font-weight:600}
-.ucard-note{font-size:0.82rem;color:#475569;font-style:italic;line-height:1.5}
-
-/* === PRIZE POOL === */
-.prize-section-title{text-align:center;font-size:1.6rem;font-weight:800;margin-bottom:24px;background:linear-gradient(135deg,#c084fc,#f0abfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.gift-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:24px}
-.gift-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 14px;text-align:center;transition:all 0.35s;cursor:default}
-.gift-card:hover{background:rgba(124,58,237,0.12);border-color:rgba(167,139,250,0.3);transform:scale(1.06)}
-.gift-card:hover .gift-icon{animation:fire 0.5s ease-in-out infinite}
-.gift-icon{font-size:32px;margin-bottom:10px;display:block;transition:all 0.3s}
-.gift-name{font-size:0.88rem;font-weight:600;color:#f0f2ff;margin-bottom:4px}
-.gift-val{font-size:1rem;font-weight:800;color:#34d399}
-.feature-list{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden}
-.feat-row{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background 0.25s}
-.feat-row:last-child{border-bottom:none}
-.feat-row:hover{background:rgba(124,58,237,0.08)}
-.feat-ico{font-size:20px;flex-shrink:0;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(124,58,237,0.15)}
-.feat-text{font-size:0.9rem;color:#94a3b8}
-
-/* === WINNERS === */
-.winners-section-head{text-align:center;margin-bottom:28px}
-.winners-crown{font-size:48px;animation:crown-bounce 2s ease-in-out infinite;display:inline-block;margin-bottom:12px}
-.winners-title{font-size:2rem;font-weight:800;background:linear-gradient(135deg,#fbbf24,#f59e0b,#fcd34d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
-.winners-sub{font-size:0.95rem;color:#64748b}
-
-.contest-banner{background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(236,72,153,0.1));border:1px solid rgba(167,139,250,0.2);border-radius:20px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.contest-badge{background:rgba(46,213,115,0.12);border:1px solid rgba(46,213,115,0.25);border-radius:50px;padding:5px 14px;font-size:0.8rem;font-weight:700;color:#34d399;letter-spacing:0.5px;white-space:nowrap}
-.contest-info{flex:1}
-.contest-title{font-size:1.1rem;font-weight:700;color:#f0f2ff;margin-bottom:4px}
-.contest-meta{display:flex;gap:16px;flex-wrap:wrap}
-.contest-date{font-size:0.83rem;color:#64748b;display:flex;align-items:center;gap:4px}
-
-.winner-block{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;margin-bottom:18px;transition:all 0.35s}
-.winner-block:hover{border-color:rgba(167,139,250,0.25);background:rgba(124,58,237,0.07)}
-.winner-row{display:flex;align-items:center;gap:18px}
-.winner-avatar-wrap{position:relative;flex-shrink:0}
-.winner-img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(124,58,237,0.5);display:block;transition:all 0.35s}
-.winner-block:hover .winner-img{border-color:rgba(167,139,250,0.8);box-shadow:0 0 20px rgba(124,58,237,0.5)}
-.rank-badge{position:absolute;bottom:-4px;right:-4px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:900;color:#fff;border:2px solid #06080f;background:linear-gradient(135deg,#fbbf24,#f59e0b);box-shadow:0 2px 10px rgba(251,191,36,0.6)}
-.winner-body{flex:1}
-.winner-name{font-size:1.15rem;font-weight:800;color:#f0f2ff;margin-bottom:2px}
-.winner-handle{font-size:0.85rem;color:#7c3aed;margin-bottom:10px;font-weight:600}
-.winner-prize-row{display:flex;align-items:baseline;gap:8px}
-.winner-prize-val{font-size:1.4rem;font-weight:900;color:#fbbf24}
-.winner-prize-lbl{font-size:0.78rem;color:#64748b;font-weight:500}
-.winner-trophy{font-size:2.2rem;flex-shrink:0;animation:crown-bounce 2s ease-in-out infinite}
-
-.others-box{background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(236,72,153,0.07));border:1px solid rgba(167,139,250,0.15);border-radius:16px;padding:16px 20px;margin-bottom:18px;text-align:center}
-.others-title{font-size:1rem;font-weight:700;color:#fbbf24;margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:6px}
-.others-text{font-size:0.88rem;color:#94a3b8;line-height:1.6;margin-bottom:14px}
-.winner-photo-wrap{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);max-width:420px;margin:0 auto}
-.winner-photo{display:block;width:100%;object-fit:contain}
-
-.all-received{background:rgba(46,213,115,0.08);border:1px solid rgba(46,213,115,0.18);border-radius:14px;padding:16px 20px;text-align:center;margin-top:16px}
-.all-received-title{font-size:0.95rem;font-weight:700;color:#34d399;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:6px}
-.all-received-text{font-size:0.85rem;color:#64748b}
-
-/* === FLOATING PARTICLES === */
-.particles{position:fixed;inset:0;pointer-events:none;z-index:99;overflow:hidden}
-.particle{position:absolute;border-radius:50%;animation:particle-float var(--dur,3s) ease-out forwards var(--del,0s);opacity:0;width:var(--sz,6px);height:var(--sz,6px);background:var(--col,#a855f7)}
-
-/* === FOOTER === */
-.footer{background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(236,72,153,0.08));border:1px solid rgba(255,255,255,0.07);border-radius:24px;padding:40px 24px;text-align:center;margin-top:40px}
-.footer h2{font-size:1.6rem;font-weight:800;color:#f0f2ff;margin-bottom:10px}
-.footer p{font-size:0.95rem;color:#64748b;max-width:500px;margin:0 auto 20px;line-height:1.7}
-.hashtags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:24px}
-.hashtag{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:50px;padding:6px 14px;font-size:0.82rem;color:#94a3b8;transition:all 0.3s}
-.hashtag:hover{background:rgba(124,58,237,0.2);border-color:rgba(167,139,250,0.3);color:#c4b5fd;transform:translateY(-2px)}
-.visit-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#7c3aed,#a855f7,#ec4899);color:#fff;padding:14px 32px;border-radius:50px;text-decoration:none;font-weight:700;font-size:1rem;box-shadow:0 8px 30px rgba(124,58,237,0.45);transition:all 0.35s}
-.visit-btn:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(124,58,237,0.65)}
-.btn-icon{font-size:18px}
-
-@media(max-width:560px){
-  .winner-row{flex-direction:column;text-align:center}
-  .winner-trophy{margin:0 auto}
-  .contest-banner{flex-direction:column}
-  .tabs{gap:4px}
-  .tab{font-size:0.82rem;padding:10px 6px}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f0e8"><title>Ganesh U. — Software Developer</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet"><style>
+:root{
+  --paper:#f6f7fb;--ink:#0c0d10;--muted:#6c707b;--line:rgba(12,13,16,.12);
+  --card:#ffffff;--blue:#635bff;--cyan:#45e0ff;--purple:#9b7cff;
+  --dark:#0b0c10;--green:#9cff57;--orange:#ff8a5c;
+  --ease:cubic-bezier(.16,.8,.16,1);
 }
-</style>
+*{box-sizing:border-box}
+html{scroll-behavior:auto;width:100%;min-width:0}html,body{max-width:100%;min-width:0}body{width:100%;min-height:100%;position:relative}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Manrope,system-ui,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit;text-decoration:none}button{font:inherit}.wrap{width:calc(100% - 56px);max-width:1320px;margin-inline:auto}
+.mono{font-family:"DM Mono",monospace}.display{font-family:"Space Grotesk",sans-serif}
+.reveal{opacity:1;transform:translateY(0)}.js-reveal{opacity:0;transform:translateY(55px)}
+#progress{position:fixed;left:0;top:0;width:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan));z-index:10001}
+#cursor,#cursor2{position:fixed;pointer-events:none;z-index:10000;border-radius:50%;mix-blend-mode:difference}
+#cursor{width:15px;height:15px;border:1px solid #fff;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s}
+#cursor2{width:4px;height:4px;background:#fff;transform:translate(-50%,-50%)}
+body.cursor-hover #cursor{width:58px;height:58px;background:#fff;border-color:#fff}
+@media(max-width:800px){#cursor,#cursor2{display:none}.wrap{width:calc(100% - 30px);max-width:none}.hero-inner{width:calc(100% - 30px)}}
 
-<div class="particles" id="ptcl"></div>
+header{position:fixed;left:0;right:0;top:0;z-index:1000;padding:18px 24px;transition:.45s var(--ease)}
+header.scrolled{padding:10px 24px}
+.nav{width:min(1320px,100%);margin:auto;display:flex;align-items:center;gap:25px;padding:12px 14px 12px 20px;border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.72);backdrop-filter:blur(22px);border-radius:18px;box-shadow:0 16px 50px rgba(20,22,35,.08)}
+.logo{font-family:"Space Grotesk";font-weight:700;letter-spacing:-.06em;font-size:18px;white-space:nowrap}.logo span{color:var(--blue)}
+.navlinks{display:flex;gap:27px;margin:auto;font-size:11px;font-weight:800;letter-spacing:.08em}.navlinks a{color:#5e616a;transition:.3s}.navlinks a:hover{color:var(--blue)}
+.nav-right{display:flex;align-items:center;gap:10px}.availability{font:9px "DM Mono";letter-spacing:.08em;color:#555}.status-dot{width:7px;height:7px;background:#6bea4d;border-radius:50%;box-shadow:0 0 0 5px rgba(107,234,77,.13)}
+.navcta{background:var(--ink);color:#fff;border-radius:11px;padding:11px 14px;font-size:10px;font-weight:800;letter-spacing:.04em}.navcta b{color:var(--cyan)}
+@media(max-width:850px){.navlinks,.availability{display:none}.nav-right{margin-left:auto}.nav{padding-left:15px}.navcta{padding:10px 12px}}
 
-<div class="page">
+.hero{width:100%;min-height:100svh;position:relative;display:flex;align-items:center;overflow:hidden;padding:140px 0 55px;background:#0b0c10;color:#fff}
+#webgl{position:absolute;inset:0;z-index:0;opacity:.62}
+.hero-grid{position:absolute;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:70px 70px;mask-image:linear-gradient(to bottom,black,transparent 95%)}
+.hero-glow{position:absolute;width:55vw;height:55vw;right:-20vw;top:-25vw;border-radius:50%;background:radial-gradient(circle,rgba(99,91,255,.3),transparent 68%);filter:blur(20px);z-index:1}
+.hero-inner{position:relative;z-index:3;width:min(1320px,calc(100% - 56px))}
+.hero-topline{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.13);padding-bottom:16px;font:10px "DM Mono";letter-spacing:.1em;color:#969aa7}
+.hero-topline .live{display:inline-block;margin-right:9px}
+.live{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 7px rgba(156,255,87,.09);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 14px rgba(156,255,87,0)}}
+.hero-layout{display:grid;grid-template-columns:1.45fr .55fr;gap:50px;align-items:center;padding-top:45px}
+.hero-label{font:10px "DM Mono";letter-spacing:.14em;color:#838793;margin-bottom:22px}
+.hero h1{margin:0;font-weight:600;font-size:clamp(76px,11vw,165px);line-height:.76;letter-spacing:-.085em}
+.hero-title .name{color:#fff}.hero-title .accent{color:var(--cyan);margin-left:.04em}.hero-title .role{font-size:.72em}.hero-title .muted-word{color:#60636d}
+.hero-sub{max-width:670px;color:#a7aab4;font-size:clamp(15px,1.55vw,20px);line-height:1.55;margin:36px 0}
+.hero-actions{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.btn{position:relative;display:inline-flex;align-items:center;gap:15px;padding:14px 18px;border:1px solid rgba(255,255,255,.25);border-radius:12px;font-weight:800;font-size:10px;letter-spacing:.08em;overflow:hidden;transition:transform .35s var(--ease)}
+.btn:before{content:"";position:absolute;inset:0;background:var(--cyan);transform:translateY(105%);transition:.4s var(--ease);z-index:-1}.btn:hover{transform:translateY(-4px);color:var(--ink)}.btn:hover:before{transform:translateY(0)}.btn.dark{background:#fff;color:var(--ink);border-color:#fff}.btn.dark:before{background:var(--cyan)}
+.text-link{font:10px "DM Mono";color:#8e919d;transition:.3s}.text-link span{color:#fff;margin-left:10px}.text-link:hover{color:var(--cyan);transform:translateX(6px)}
+.hero-side{display:flex;flex-direction:column;gap:14px}
+.code-card{position:relative;background:rgba(18,19,25,.8);border:1px solid rgba(255,255,255,.13);border-radius:18px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.35);transform:rotate(2deg);transition:.6s var(--ease)}
+.code-card:hover{transform:rotate(0) translateY(-8px)}
+.code-head{height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 13px;border-bottom:1px solid rgba(255,255,255,.08);font:8px "DM Mono";color:#666b77}
+.code-head i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#444;margin-right:4px}
+.code-card pre{padding:22px 20px;margin:0;color:#b9becb;font:10px/1.8 "DM Mono";white-space:pre-wrap}.purple{color:#c8a8ff}.white{color:#fff}.blue{color:#6ed8ff}.green{color:#a4f58c}.orange{color:#ff9d7a}
+.code-scan{height:1px;position:absolute;left:0;right:0;top:0;background:var(--cyan);box-shadow:0 0 18px var(--cyan);animation:scan 4s linear infinite}
+@keyframes scan{0%{top:38px}100%{top:100%}}
+.hero-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden}
+.hero-mini-grid div{padding:14px;border-right:1px solid rgba(255,255,255,.1)}.hero-mini-grid div:last-child{border:0}.hero-mini-grid b{font:25px "Space Grotesk";display:block}.hero-mini-grid span{font:7px "DM Mono";color:#747985;line-height:1.4}
+.scroll-note{margin-top:40px;font-size:9px;color:#656a75;letter-spacing:.12em}.scroll-note span{color:var(--cyan);font-size:15px;margin-left:10px}
+@media(max-width:900px){.hero-layout{grid-template-columns:1fr}.hero-side{display:none}.hero h1{font-size:17vw}.hero-sub{max-width:600px}.hero-topline{margin-top:15px}}
 
-  <div class="hero">
-    <div class="hero-bg">
-      <div class="orb orb1"></div>
-      <div class="orb orb2"></div>
-      <div class="orb orb3"></div>
-      <div class="star-field" id="sf"></div>
+.marquee{background:var(--cyan);color:#0b0c10;overflow:hidden;border-block:1px solid #0b0c10}.marquee-track{display:flex;width:max-content;animation:marquee 26s linear infinite}.marquee span{font-family:"Space Grotesk";font-weight:700;font-size:clamp(28px,4vw,56px);letter-spacing:-.06em;padding:14px 20px;white-space:nowrap}.marquee i{color:var(--blue);font-style:normal}@keyframes marquee{to{transform:translateX(-50%)}}
+
+section{width:100%;padding:135px 0;position:relative}.section-head{display:grid;grid-template-columns:.65fr 2fr;gap:70px;margin-bottom:70px}.kicker{font:500 10px "DM Mono";text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}.section-title{font-size:clamp(44px,6.5vw,88px);line-height:.9;letter-spacing:-.075em;margin:0}.section-title em{color:var(--blue);font-style:normal}.section-copy{font-size:17px;line-height:1.75;color:#60636d;max-width:720px;margin-top:28px}@media(max-width:780px){.section-head{grid-template-columns:1fr;gap:18px;margin-bottom:45px}}
+
+.about-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}.about-image{min-height:590px;border-radius:24px;overflow:hidden;position:relative;background:#111}.about-image:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.45));pointer-events:none}.about-image img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.25) contrast(1.04);transition:transform 1.2s var(--ease),filter .6s}.about-image:hover img{transform:scale(1.06);filter:grayscale(0)}.image-tag{position:absolute;z-index:2;left:18px;top:18px;background:#fff;color:#111;padding:9px 11px;border-radius:9px;font:9px "DM Mono";letter-spacing:.08em}
+.about-card{background:#0d0e12;color:#fff;border-radius:24px;padding:34px;display:flex;flex-direction:column;justify-content:space-between;min-height:590px;overflow:hidden;position:relative}.about-card:before{content:"";position:absolute;width:500px;height:500px;right:-260px;top:-250px;border:1px solid rgba(99,91,255,.3);border-radius:50%;box-shadow:0 0 0 80px rgba(99,91,255,.03),0 0 0 160px rgba(99,91,255,.02)}.about-card h3{font-size:clamp(42px,5vw,72px);line-height:.94;letter-spacing:-.07em;margin:14px 0;position:relative;z-index:1}.metrics{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,255,255,.15);position:relative;z-index:2}.metric{padding:20px 0}.metric:nth-child(odd){border-right:1px solid rgba(255,255,255,.15);padding-right:18px}.metric:nth-child(even){padding-left:18px}.metric strong{font-size:38px;display:block}.metric span{font:9px "DM Mono";color:#777c87}@media(max-width:850px){.about-layout{grid-template-columns:1fr}.about-image,.about-card{min-height:430px}}
+
+.skills{background:#0b0c10;color:#fff;overflow:hidden}.skills .section-title{color:#fff}.skills .section-copy{color:#878b96}.skill-orbit{position:relative;height:610px;margin-top:40px;display:grid;place-items:center}.orbit{position:absolute;border:1px solid rgba(255,255,255,.13);border-radius:50%;animation:orbitSpin linear infinite}.o1{width:390px;height:390px;animation-duration:18s}.o2{width:600px;height:600px;animation-duration:28s;animation-direction:reverse}.orbit:before{content:"";position:absolute;width:10px;height:10px;background:var(--cyan);border-radius:50%;left:50%;top:-5px;box-shadow:0 0 25px var(--cyan)}.o2:before{background:var(--purple);box-shadow:0 0 25px var(--purple);top:auto;left:auto;right:16%;bottom:-5px}@keyframes orbitSpin{to{transform:rotate(360deg)}}.skill-core{text-align:center;z-index:2}.skill-core small{font:9px "DM Mono";color:#6e727d}.skill-core h3{font-size:clamp(58px,8vw,112px);letter-spacing:-.1em;line-height:.78;margin:12px 0}.pill{position:absolute;padding:11px 14px;border:1px solid rgba(255,255,255,.17);border-radius:10px;background:rgba(255,255,255,.045);backdrop-filter:blur(10px);transition:.4s}.pill:hover{background:#fff;color:#111;transform:scale(1.1) rotate(-3deg)}.p1{top:8%;left:11%}.p2{top:22%;right:9%}.p3{bottom:19%;left:17%}.p4{bottom:9%;right:17%}.p5{top:48%;left:4%}.p6{top:57%;right:3%}@media(max-width:700px){.skill-orbit{height:430px}.o1{width:265px;height:265px}.o2{width:390px;height:390px}.pill{font-size:8px;padding:8px 10px}.p1{left:0}.p2{right:0}.p5{left:0}.p6{right:0}}
+
+.experience-list{border-top:1px solid var(--ink)}.exp{display:grid;grid-template-columns:160px 1fr 110px;gap:28px;padding:30px 0;border-bottom:1px solid var(--line);transition:.45s var(--ease)}.exp:hover{padding-left:18px;background:rgba(99,91,255,.035)}.exp-year{font:10px "DM Mono";color:var(--muted)}.exp h3{font-size:28px;letter-spacing:-.045em;margin:0 0 8px}.exp p{margin:0;color:var(--muted);line-height:1.65}.exp-type{font:9px "DM Mono";text-align:right;color:var(--blue)}@media(max-width:700px){.exp{grid-template-columns:1fr;gap:8px}.exp-type{text-align:left}}
+
+.projects{background:#e9ebf2}.project-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.project{background:#fff;border:1px solid rgba(12,13,16,.1);border-radius:22px;overflow:hidden;min-height:480px;position:relative;transition:transform .6s var(--ease),box-shadow .6s}.project:nth-child(1){grid-column:span 7}.project:nth-child(2){grid-column:span 5}.project:nth-child(3){grid-column:span 5}.project:nth-child(4){grid-column:span 7}.project:hover{transform:translateY(-10px);box-shadow:18px 30px 70px rgba(21,24,40,.13)}.project-media{height:265px;overflow:hidden;background:#ddd;position:relative}.project-media:after{content:"VIEW";position:absolute;right:15px;top:15px;padding:7px 9px;border-radius:7px;background:rgba(255,255,255,.85);font:8px "DM Mono";opacity:0;transform:translateY(-6px);transition:.35s}.project:hover .project-media:after{opacity:1;transform:none}.project-media img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease);filter:saturate(.78)}.project:hover img{transform:scale(1.08);filter:saturate(1)}.project-body{padding:24px}.project-no{font:9px "DM Mono";color:var(--blue);letter-spacing:.08em}.project h3{font-size:31px;letter-spacing:-.055em;margin:12px 0}.project p{color:var(--muted);line-height:1.6}.tags{display:flex;flex-wrap:wrap;gap:7px}.tags span{font:9px "DM Mono";border:1px solid var(--line);padding:7px 9px;border-radius:7px}.arrow{position:absolute;right:18px;bottom:18px;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#111;color:#fff;font-size:18px;transition:.4s}.project:hover .arrow{background:var(--blue);transform:translate(3px,-3px) rotate(0)}@media(max-width:800px){.project-grid{display:block}.project{margin-bottom:16px}.project-media{height:220px}}
+
+.arch{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}.arch-visual{background:var(--blue);border-radius:24px;min-height:570px;position:relative;overflow:hidden;padding:30px;color:white}.arch-visual img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;mix-blend-mode:screen;opacity:.3}.nodes{position:absolute;inset:0}.node{position:absolute;width:112px;height:112px;border:1px solid rgba(255,255,255,.45);border-radius:20px;display:grid;place-items:center;text-align:center;font:9px "DM Mono";backdrop-filter:blur(7px);animation:float 4s ease-in-out infinite}.node:nth-child(1){left:11%;top:15%}.node:nth-child(2){right:11%;top:28%;animation-delay:-1s}.node:nth-child(3){left:25%;bottom:18%;animation-delay:-2s}.node:nth-child(4){right:17%;bottom:12%;animation-delay:-3s}@keyframes float{50%{transform:translateY(-15px) rotate(3deg)}}.arch-copy h3{font-size:clamp(44px,6vw,80px);line-height:.9;letter-spacing:-.075em;margin:0 0 25px}.stack-list{border-top:1px solid var(--line)}.stack{display:flex;justify-content:space-between;gap:20px;padding:18px 0;border-bottom:1px solid var(--line);font-weight:700}.stack span{font:9px "DM Mono";color:var(--blue);text-align:right}@media(max-width:850px){.arch{grid-template-columns:1fr}.arch-visual{min-height:420px}}
+
+.contact{background:#635bff;min-height:88vh;display:flex;align-items:center;color:#fff;overflow:hidden}.contact:before{content:"";position:absolute;width:650px;height:650px;border:1px solid rgba(255,255,255,.18);border-radius:50%;right:-260px;top:-170px;box-shadow:0 0 0 100px rgba(255,255,255,.025),0 0 0 200px rgba(255,255,255,.02)}.contact h2{font-size:clamp(72px,13vw,175px);line-height:.77;letter-spacing:-.095em;margin:0 0 50px}.contact h2 span{color:var(--cyan)}.contact-row{display:flex;justify-content:space-between;align-items:end;gap:30px}.contact-mail{font-size:clamp(19px,3vw,38px);font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:8px}.socials{display:flex;gap:8px;flex-wrap:wrap}.socials a{border:1px solid rgba(255,255,255,.4);padding:10px 13px;border-radius:9px;font:9px "DM Mono";transition:.3s}.socials a:hover{background:#fff;color:#111}@media(max-width:700px){.contact-row{display:block}.socials{margin-top:25px}footer{display:block}footer div+div{margin-top:10px}}
+
+footer{padding:22px;background:#0b0c10;color:#777b85;font:9px "DM Mono";display:flex;justify-content:space-between;gap:20px}
+#loader{position:fixed;inset:0;background:#0b0c10;color:#fff;z-index:20000;display:grid;place-items:center}.loader-inner{width:min(500px,80%)}.loader-top{display:flex;justify-content:space-between;font:10px "DM Mono";margin-bottom:14px}.loader-bar{height:2px;background:#24262d;overflow:hidden}.loader-fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+@media (max-width:900px){html,body{width:100%;overflow-x:hidden}.hero,.marquee,section,footer{width:100%;max-width:100vw}.hero-inner{width:calc(100% - 30px);max-width:none}.section-head{grid-template-columns:1fr}.project-grid{display:block}.project{margin-bottom:16px}.about-layout,.arch{grid-template-columns:1fr}.about-image,.about-card{min-height:430px}.skill-orbit{height:430px}.o1{width:265px;height:265px}.o2{width:390px;height:390px}}
+</style></head><body><div id="loader"><div class="load"><div class="loadtop"><span>GANESH U / OS</span><span id="pct">00%</span></div><div class="bar"><div class="fill"></div></div></div></div><div id="progress"></div><div id="cursor"></div><div id="cursor2"></div>
+<header id="header">
+  <nav class="nav">
+    <a class="logo" href="#top">GANESH <span>U.</span></a>
+    <div class="navlinks">
+      <a href="#about">ABOUT</a><a href="#skills">EXPERTISE</a><a href="#work">PROJECTS</a><a href="#contact">CONTACT</a>
     </div>
-    <div class="logo-wrap"><div class="logo-inner">🌟</div></div>
-    <h1 class="hero-title"><span>InspireVibes Now</span></h1>
-    <p class="hero-sub">Milestone Celebrations &amp; Exclusive Giveaways</p>
-    <div class="stats-row">
-      <div class="stat-pill"><span class="stat-dot"></span> Live Milestones</div>
-      <div class="stat-pill">✦ Real Prizes</div>
-      <div class="stat-pill">💖 Growing Community</div>
+    <div class="nav-right">
+      <span class="status-dot"></span><span class="availability">OPEN TO WORK</span>
+      <a class="navcta magnetic" href="#contact">LET'S CONNECT <b>↗</b></a>
     </div>
-  </div>
-
-  <div class="tabs">
-    <button class="tab on" onclick="sw(0,this)"><span class="tab-icon">🚀</span>Current Milestone</button>
-    <button class="tab" onclick="sw(1,this)"><span class="tab-icon">🌠</span>Upcoming</button>
-    <button class="tab" onclick="sw(2,this)"><span class="tab-icon">🎁</span>Prize Pool</button>
-    <button class="tab" onclick="sw(3,this)"><span class="tab-icon">🏆</span>Winners</button>
-  </div>
-
-  <div id="s0" class="sec">
-    <div class="milestone-hero">
-      <div class="milestone-badge"><span class="milestone-badge-dot"></span> CURRENT MILESTONE</div>
-      <div class="milestone-number">5,000</div>
-      <div class="milestone-label">Followers Goal 🎯</div>
-      <div class="milestone-prize-tag">💎 ₹5,000+ Worth of Gifts</div>
-      <div class="progress-section">
-        <div class="progress-header">
-          <span class="progress-label">Progress to 5K followers</span>
-          <span class="progress-pct">42%</span>
+  </nav>
+</header>
+<main id="top"><section class="hero">
+  <canvas id="webgl"></canvas><div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="wrap hero-inner">
+    <div class="hero-topline hero-reveal">
+      <span><i class="live"></i> SOFTWARE DEVELOPER</span>
+      <span class="mono">INDIA · 2026</span>
+    </div>
+    <div class="hero-layout">
+      <div>
+        <div class="hero-label hero-reveal">01 — DIGITAL ENGINEER / PRODUCT BUILDER</div>
+        <h1 class="display hero-title"><span class="name">GANESH</span><span class="name accent">U.</span><br><span class="role">SOFTWARE</span><br><span class="role muted-word">DEVELOPER</span></h1>
+        <p class="hero-sub hero-reveal">I build fast, thoughtful digital products across frontend, backend, cloud infrastructure and AI — turning complex ideas into software people enjoy using.</p>
+        <div class="hero-actions hero-reveal">
+          <a class="btn dark magnetic" href="#work">VIEW PROJECTS <b>↓</b></a>
+          <a class="text-link magnetic" href="#contact">HAVE A PROJECT? <span>LET'S TALK ↗</span></a>
         </div>
-        <div class="progress-track">
-          <div class="progress-fill"><div class="progress-glow"></div></div>
+      </div>
+      <div class="hero-side">
+        <div class="code-card hero-reveal">
+          <div class="code-head"><span><i></i><i></i><i></i></span><span class="mono">ganesh.config.ts</span><span>•••</span></div>
+          <pre><span class="purple">const</span> <span class="white">developer</span> = {
+  <span class="blue">name</span>: <span class="green">"Ganesh U."</span>,
+  <span class="blue">focus</span>: [<span class="green">"web"</span>, <span class="green">"cloud"</span>, <span class="green">"AI"</span>],
+  <span class="blue">mindset</span>: <span class="green">"ship better"</span>,
+  <span class="blue">status</span>: <span class="orange">"building"</span>
+};</pre>
+          <div class="code-scan"></div>
         </div>
-        <div class="progress-sub"><span>Getting there!</span><span>5,000 🎯</span></div>
-      </div>
-    </div>
-    <div class="detail-cards">
-      <div class="detail-card"><span class="detail-icon">🏆</span><div class="detail-val">5</div><div class="detail-key">Lucky Winners</div></div>
-      <div class="detail-card"><span class="detail-icon">💰</span><div class="detail-val">₹5,000+</div><div class="detail-key">Total Prize Value</div></div>
-      <div class="detail-card"><span class="detail-icon">🎯</span><div class="detail-val">5,000</div><div class="detail-key">Follower Goal</div></div>
-      <div class="detail-card"><span class="detail-icon">📢</span><div class="detail-val">Soon™</div><div class="detail-key">Announcement</div></div>
-    </div>
-    <div class="secret-reveal">
-      <div class="secret-title">🎁 Secret Gift for All Participants</div>
-      <div class="secret-body">A surprise gift awaits every participant — revealed only on announcement day. Stay tuned!</div>
-    </div>
-    <p style="text-align:center;font-size:0.85rem;color:#475569;font-style:italic;margin-top:18px">Complete entry requirements will be shared once we hit this milestone. Follow us to not miss out!</p>
-  </div>
-
-  <div id="s1" class="sec" style="display:none">
-    <div class="upcoming-grid">
-      <div class="ucard">
-        <div class="ucard-top"><span class="ucard-icon">🌠</span><span class="ubadge ubadge-soon">Upcoming</span></div>
-        <div class="ucard-title">10,000 Followers</div>
-        <div class="ucard-prize">🏆 ₹10,000+ Worth Gifts</div>
-        <div class="ucard-info">
-          <div class="ucard-row"><span class="ucard-row-label">Winners</span><span class="ucard-row-val">10 Lucky Winners</span></div>
-        </div>
-        <div class="secret-reveal" style="margin:0"><div class="secret-title" style="font-size:0.9rem">🎁 Secret Gift for All</div><div class="secret-body" style="font-size:0.82rem">Revealed on announcement day</div></div>
-        <p class="ucard-note" style="margin-top:12px">Details announced when milestone is reached.</p>
-      </div>
-      <div class="ucard">
-        <div class="ucard-top"><span class="ucard-icon">🌟</span><span class="ubadge ubadge-soon">Upcoming</span></div>
-        <div class="ucard-title">15,000 Followers</div>
-        <div class="ucard-prize">⭐ ₹15,000+ Worth Gifts</div>
-        <div class="ucard-info">
-          <div class="ucard-row"><span class="ucard-row-label">Winners</span><span class="ucard-row-val">10 Lucky Winners</span></div>
-        </div>
-        <div class="secret-reveal" style="margin:0"><div class="secret-title" style="font-size:0.9rem">🎁 Secret Gift for All</div><div class="secret-body" style="font-size:0.82rem">Revealed on announcement day</div></div>
-        <p class="ucard-note" style="margin-top:12px">Details announced when milestone is reached.</p>
-      </div>
-      <div class="ucard">
-        <div class="ucard-top"><span class="ucard-icon">💎</span><span class="ubadge ubadge-plan">Planned</span></div>
-        <div class="ucard-title">Future Milestones</div>
-        <div class="ucard-prize">🎊 Exciting Prize Pool</div>
-        <div class="secret-reveal" style="margin:0"><div class="secret-title" style="font-size:0.9rem">🎁 Secret Gift for All</div><div class="secret-body" style="font-size:0.82rem">Revealed on announcement day</div></div>
-        <p class="ucard-note" style="margin-top:12px">Stay connected for bigger milestones &amp; incredible prizes!</p>
-      </div>
-    </div>
-  </div>
-
-  <div id="s2" class="sec" style="display:none">
-    <div class="prize-section-title">🎁 Prize Pool &amp; Gift Categories</div>
-    <div class="gift-grid">
-      <div class="gift-card"><span class="gift-icon">👕</span><div class="gift-name">Premium T-Shirt</div><div class="gift-val">₹500</div></div>
-      <div class="gift-card"><span class="gift-icon">☕</span><div class="gift-name">Designer Mug</div><div class="gift-val">₹500</div></div>
-      <div class="gift-card"><span class="gift-icon">🧥</span><div class="gift-name">Branded Hoodie</div><div class="gift-val">₹2,000</div></div>
-      <div class="gift-card"><span class="gift-icon">👜</span><div class="gift-name">Ladies Handbag</div><div class="gift-val">₹2,000</div></div>
-      <div class="gift-card"><span class="gift-icon">🎁</span><div class="gift-name">Premium Items</div><div class="gift-val">Up to ₹10,000</div></div>
-      <div class="gift-card"><span class="gift-icon">✨</span><div class="gift-name">Secret Gift</div><div class="gift-val" style="color:#fbbf24">For All</div></div>
-    </div>
-    <div class="feature-list">
-      <div class="feat-row"><div class="feat-ico">🏆</div><div class="feat-text">Multiple wins possible across different milestones</div></div>
-      <div class="feat-row"><div class="feat-ico">🎊</div><div class="feat-text">Secret participation gift revealed only on announcement day</div></div>
-      <div class="feat-row"><div class="feat-ico">💎</div><div class="feat-text">Premium prizes valued up to ₹10,000 for major milestones</div></div>
-      <div class="feat-row"><div class="feat-ico">📢</div><div class="feat-text">Complete gift lists announced with every milestone</div></div>
-    </div>
-  </div>
-
-  <div id="s3" class="sec" style="display:none">
-    <div class="winners-section-head">
-      <div class="winners-crown">👑</div>
-      <div class="winners-title">Hall of Winners</div>
-      <div class="winners-sub">Celebrating our amazing community members</div>
-    </div>
-
-    <div class="contest-banner">
-      <div class="contest-badge">✓ COMPLETED</div>
-      <div class="contest-info">
-        <div class="contest-title">1K+ Views Milestone Giveaway</div>
-        <div class="contest-meta">
-          <span class="contest-date">🗓 Ended: 30 Nov, 2025</span>
-          <span class="contest-date">📢 Announced: 1 Dec, 2025</span>
+        <div class="hero-mini-grid">
+          <div><b>7+</b><span>YEARS<br>BUILDING</span></div>
+          <div><b>40+</b><span>SHIPPED<br>PROJECTS</span></div>
+          <div><b>∞</b><span>IDEAS<br>TO CODE</span></div>
         </div>
       </div>
     </div>
-
-    <div class="winner-block">
-      <div class="winner-row">
-        <div class="winner-avatar-wrap">
-          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjW3PRSLLIdUQIi72_-rwUkvXBLES082__Nga55v4AWKCzlMKkUs6WBi8SUtO1tfPLJXOUObvDULJDxGF7Ky7g-V_Wy5Hdl6Wi2N8tJoj1qnFjjgG4qYouiXCGSz-emlrtbBixzh6Kg6wMPxs-izqxknFRySkWVCZXQGBI5DJX52MioxAxL4KZ9AHi8-MuV/s150/1.jpg" alt="Winner" class="winner-img">
-          <div class="rank-badge">1st</div>
-        </div>
-        <div class="winner-body">
-          <div class="winner-name">Sushmita Uniyal ❣️</div>
-          <div class="winner-handle">@princyangle_08</div>
-          <div class="winner-prize-row">
-            <span class="winner-prize-val">₹1,000</span>
-            <span class="winner-prize-lbl">Cash Prize</span>
-          </div>
-        </div>
-        <div class="winner-trophy">🏆</div>
-      </div>
-    </div>
-
-    <div class="others-box">
-      <div class="others-title">🎁 Other 5 Winners</div>
-      <div class="others-text">Each received a Secret Gift of <strong style="color:#fbbf24">₹200 cash</strong> &amp; <strong style="color:#fbbf24">₹100 Amazon Gift Voucher</strong></div>
-      <div class="winner-photo-wrap">
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiO2UNi1Q7BfLbbs7fiW-IVhXwAE8WWSSyap4YBROK-DQcm8EgHrHgUDbXIYQWYkTT66G0qfxSSbQKLv9k3O0SVIakw1fuQ0oeivRYP0YdEaOaneJz188uqNTiSJXHobPVnDwg-BBhV_QY95By-jYZlgluuEUb7jvpcskVOC1ndYJbi_e_tsCmLvgnsFFr9/s1280/WhatsApp%20Image%202025-12-01%20at%201.10.12%20AM.jpeg" alt="Winners Group" class="winner-photo">
-      </div>
-    </div>
-
-    <div class="all-received">
-      <div class="all-received-title">🎁 All Participants Received a Secret Gift</div>
-      <div class="all-received-text">Thank you to everyone who participated! All gifts have been sent via DM. 💖</div>
-    </div>
+    <div class="scroll-note mono">SCROLL TO EXPLORE <span>↓</span></div>
   </div>
-
-  <div class="footer">
-    <h2>Join Our Growing Community 💖</h2>
-    <p>Thank you for being part of this journey. Every follower helps us build a space where we inspire each other every single day.</p>
-    <div class="hashtags">
-      <span class="hashtag">#InspireVibesNow</span>
-      <span class="hashtag">#Giveaway</span>
-      <span class="hashtag">#MotivationDaily</span>
-      <span class="hashtag">#CommunityGrowth</span>
-    </div>
-    <a href="https://instagram.com/inspirevibes.now" target="_blank" class="visit-btn">
-      <span class="btn-icon">📱</span> Visit @inspirevibes.now
-    </a>
-  </div>
-</div>
-
-<script>
-const sf=document.getElementById('sf');
-for(let i=0;i<80;i++){
-  const s=document.createElement('div');s.className='star';
-  s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--del:${Math.random()*5}s`;
-  sf.appendChild(s);
-}
-
-function sw(idx,btn){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  btn.classList.add('on');
-  document.querySelectorAll('.sec').forEach((s,i)=>{
-    s.style.display=i===idx?'block':'none';
-    if(i===idx){s.style.animation='none';requestAnimationFrame(()=>{s.style.animation='';s.className='sec'}); }
-  });
-  if(idx===0){
-    setTimeout(()=>{
-      const pf=document.querySelector('#s0 .progress-fill');
-      if(pf){pf.style.animation='none';requestAnimationFrame(()=>{pf.style.animation='slide-right 1.4s cubic-bezier(0.22,1,0.36,1) 0.1s forwards'}); }
-    },50);
-  }
-  spawnParticles();
-}
-
-function spawnParticles(){
-  const cols=['#a855f7','#ec4899','#67e8f9','#fbbf24','#34d399'];
-  const container=document.getElementById('ptcl');
-  for(let i=0;i<14;i++){
-    const p=document.createElement('div');p.className='particle';
-    const sz=4+Math.random()*8;
-    p.style.cssText=`left:${Math.random()*100}%;bottom:20%;--dur:${1.5+Math.random()*2}s;--del:${Math.random()*0.8}s;--sz:${sz}px;--col:${cols[Math.floor(Math.random()*cols.length)]};`;
-    container.appendChild(p);
-    setTimeout(()=>p.remove(),(3+Math.random()*2)*1000);
-  }
-}
-
-setTimeout(spawnParticles,800);
-</script>
+</section>
+<div class="marquee"><div class="track"><span>FULL STACK <i>✦</i></span><span>CLOUD <i>✦</i></span><span>AI PRODUCTS <i>✦</i></span><span>ARCHITECTURE <i>✦</i></span><span>FULL STACK <i>✦</i></span><span>CLOUD <i>✦</i></span><span>AI PRODUCTS <i>✦</i></span><span>ARCHITECTURE <i>✦</i></span></div></div>
+<section id="about"><div class="wrap"><div class="head reveal"><div class="kicker">01 / PROFILE</div><div><h2 class="title">Engineer first.<br><em>Experience</em> always.</h2><p class="copy">An assumed senior-level CS/software-developer profile for this portfolio concept: product-minded engineering, strong systems thinking and a bias toward shipping. The data below is sample portfolio data, not a claim about your real employment history.</p></div></div><div class="about"><div class="photo reveal"><img src="data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="#101218"/><circle cx="850" cy="230" r="250" fill="#635bff" opacity=".55"/><circle cx="930" cy="260" r="150" fill="#45e0ff" opacity=".25"/><path d="M0 650 C250 520 420 720 650 570 S1000 480 1200 600" fill="none" stroke="#45e0ff" stroke-width="3" opacity=".5"/><g fill="#fff" opacity=".75"><circle cx="160" cy="170" r="4"/><circle cx="310" cy="350" r="3"/><circle cx="530" cy="180" r="4"/><circle cx="700" cy="420" r="3"/><circle cx="1040" cy="120" r="4"/></g><text x="70" y="700" fill="#fff" font-family="Arial" font-size="54" font-weight="700">GANESH U. / BUILDING DIGITAL SYSTEMS</text></svg>" alt="Developer coding at a multi-monitor workstation"><div class="tag">BUILD / SHIP / ITERATE</div></div><div class="bio reveal"><div><div class="kicker" style="color:#999">GANESH U. / SOFTWARE ENGINEER</div><h3>Turning messy problems into clean systems.</h3></div><div class="metrics"><div class="metric"><strong>7+</strong><span>YEARS EXPERIENCE</span></div><div class="metric"><strong>40+</strong><span>PRODUCT / SYSTEM SHIPS</span></div><div class="metric"><strong>99.9%</strong><span>RELIABILITY TARGETS</span></div><div class="metric"><strong>∞</strong><span>CURIOSITY</span></div></div></div></div></div></section>
+<section id="stack" class="darksec"><div class="wrap"><div class="head reveal"><div class="kicker">02 / STACK</div><div><h2 class="title">A <em>wide</em> toolkit.<br>A focused mindset.</h2><p class="copy">Modern software work rarely fits one box. This stack combines frontend craft with backend systems, cloud infrastructure, automation, observability and AI-assisted workflows.</p></div></div><div class="orbitbox reveal"><div class="orbit o1"></div><div class="orbit o2"></div><div class="core"><small>PRIMARY MODE</small><h3>BUILD<br>SMART.</h3><small>PERFORMANCE · CLARITY · SCALE</small></div><div class="pill p1">TypeScript / JavaScript</div><div class="pill p2">React / Next.js</div><div class="pill p3">Node.js / Python</div><div class="pill p4">AWS / GCP / Docker</div><div class="pill p5">PostgreSQL / Redis</div><div class="pill p6">AI / LLM / RAG</div></div></div></section>
+<section><div class="wrap"><div class="head reveal"><div class="kicker">03 / EXPERIENCE</div><div><h2 class="title">From feature<br>to <em>architecture.</em></h2><p class="copy">Representative experienced-software-developer data, intentionally written as sample content so you can replace it with your real companies and dates.</p></div></div><div class="exp reveal"><div class="row"><div class="year">2023 — NOW</div><div><h3>Senior Software Engineer · Product Platform</h3><p>Leading full-stack delivery, architecture decisions, code reviews and performance improvements for customer-facing products and internal platforms.</p></div><div class="type">FULL STACK</div></div><div class="row"><div class="year">2021 — 2023</div><div><h3>Software Engineer · Cloud & Backend</h3><p>Built APIs, event-driven services, background workers, CI/CD pipelines and observability tooling for production systems.</p></div><div class="type">BACKEND</div></div><div class="row"><div class="year">2019 — 2021</div><div><h3>Frontend Engineer · Web Products</h3><p>Developed responsive React applications, design systems, dashboards and interactive product experiences with attention to accessibility and performance.</p></div><div class="type">FRONTEND</div></div><div class="row"><div class="year">2018 — 2019</div><div><h3>Computer Science Graduate · Builder</h3><p>Focused on algorithms, databases, operating systems, software engineering and side projects that became deployable products.</p></div><div class="type">FOUNDATION</div></div></div></div></section>
+<section id="work" class="projects"><div class="wrap"><div class="head reveal"><div class="kicker">04 / SELECTED WORK</div><div><h2 class="title">Projects that<br><em>do something.</em></h2><p class="copy">A mix of product engineering, cloud architecture and AI experimentation. The cards use 3D pointer tilt, image zoom and scroll reveals.</p></div></div><div class="cards"><article class="card tilt reveal"><div class="media"><img src="data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="#e9ebf2"/><g stroke="#635bff" stroke-width="4" fill="none" opacity=".7"><rect x="130" y="150" width="280" height="180" rx="18"/><rect x="470" y="100" width="280" height="180" rx="18"/><rect x="810" y="170" width="250" height="180" rx="18"/><path d="M410 240h60M750 190h60M270 330v160M610 280v210M935 350v140M270 490h665"/></g><g fill="#635bff"><circle cx="410" cy="240" r="9"/><circle cx="470" cy="240" r="9"/><circle cx="750" cy="190" r="9"/><circle cx="810" cy="190" r="9"/></g><text x="130" y="560" fill="#111" font-family="Arial" font-size="48" font-weight="700">CLOUD / API / DATA / DELIVERY</text></svg>" alt="AI security and code workflow"></div><div class="body"><span class="num">01 / AI PLATFORM</span><h3>Sentinel AI</h3><p>AI-assisted engineering workspace for code review, security checks and knowledge retrieval.</p><div class="tags"><span>LLM</span><span>RAG</span><span>Node</span><span>Postgres</span></div></div><div class="arrow">↗</div></article><article class="card tilt reveal"><div class="media"><img src="data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="#e9ebf2"/><g stroke="#635bff" stroke-width="4" fill="none" opacity=".7"><rect x="130" y="150" width="280" height="180" rx="18"/><rect x="470" y="100" width="280" height="180" rx="18"/><rect x="810" y="170" width="250" height="180" rx="18"/><path d="M410 240h60M750 190h60M270 330v160M610 280v210M935 350v140M270 490h665"/></g><g fill="#635bff"><circle cx="410" cy="240" r="9"/><circle cx="470" cy="240" r="9"/><circle cx="750" cy="190" r="9"/><circle cx="810" cy="190" r="9"/></g><text x="130" y="560" fill="#111" font-family="Arial" font-size="48" font-weight="700">CLOUD / API / DATA / DELIVERY</text></svg>" alt="Cloud infrastructure illustration"></div><div class="body"><span class="num">02 / CLOUD</span><h3>Atlas Platform</h3><p>Developer platform with automated environments, deployment workflows and service observability.</p><div class="tags"><span>AWS</span><span>Docker</span><span>CI/CD</span></div></div><div class="arrow">↗</div></article><article class="card tilt reveal"><div class="media" style="background:#1746ff;color:#c7ff32;font:120px 'Space Grotesk'">∞</div><div class="body"><span class="num">03 / DATA</span><h3>Pulse Analytics</h3><p>Real-time operations dashboard for high-volume event streams, metrics and anomaly signals.</p><div class="tags"><span>Kafka</span><span>Redis</span><span>React</span></div></div><div class="arrow">↗</div></article><article class="card tilt reveal"><div class="media" style="color:#c7ff32;font:14px 'DM Mono';padding:30px;line-height:1.8"><div><span style="color:#fff">const</span> product = <span style="color:#ff6b35">ship</span>({<br> speed: <span style="color:#1746ff">'fast'</span>,<br> quality: <span style="color:#1746ff">'high'</span><br>});</div></div><div class="body"><span class="num">04 / DEVELOPER TOOLS</span><h3>Forge CLI</h3><p>Opinionated tooling that turns repetitive setup and release tasks into one predictable command.</p><div class="tags"><span>CLI</span><span>TypeScript</span><span>DX</span></div></div><div class="arrow">↗</div></article></div></div></section>
+<section><div class="wrap arch"><div class="archvisual reveal"><img src="data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="#e9ebf2"/><g stroke="#635bff" stroke-width="4" fill="none" opacity=".7"><rect x="130" y="150" width="280" height="180" rx="18"/><rect x="470" y="100" width="280" height="180" rx="18"/><rect x="810" y="170" width="250" height="180" rx="18"/><path d="M410 240h60M750 190h60M270 330v160M610 280v210M935 350v140M270 490h665"/></g><g fill="#635bff"><circle cx="410" cy="240" r="9"/><circle cx="470" cy="240" r="9"/><circle cx="750" cy="190" r="9"/><circle cx="810" cy="190" r="9"/></g><text x="130" y="560" fill="#111" font-family="Arial" font-size="48" font-weight="700">CLOUD / API / DATA / DELIVERY</text></svg>" alt="Cloud architecture visualization"><div class="node n1">CLIENTS<br>WEB / MOBILE</div><div class="node n2">API<br>GATEWAY</div><div class="node n3">EVENTS<br>QUEUE</div><div class="node n4">DATA<br>PLATFORM</div></div><div class="reveal"><div class="kicker">05 / ENGINEERING</div><h3>Think in systems, not screens.</h3><p class="copy">Good software is more than a beautiful frontend. I care about boundaries, failure modes, data flow, deployment, observability and the developer experience around the product.</p><div class="stack"><div>Frontend architecture <span>REACT · NEXT · TS</span></div><div>Backend systems <span>NODE · PYTHON · API</span></div><div>Data & messaging <span>POSTGRES · REDIS · KAFKA</span></div><div>Cloud & delivery <span>AWS · DOCKER · CI/CD</span></div><div>AI engineering <span>LLM · RAG · EVALS</span></div></div></div></div></section>
+<section id="contact" class="contact"><div class="wrap"><div class="kicker">06 / CONTACT</div><h2>LET'S BUILD<br><span>WHAT'S NEXT.</span></h2><div class="contactrow"><a class="mail magnetic" href="mailto:ganesh.dev@example.com">ganesh.dev@example.com ↗</a><div class="social"><a href="#" onclick="return false">GITHUB</a><a href="#" onclick="return false">LINKEDIN</a><a href="#" onclick="return false">X / TWITTER</a><a href="#" onclick="return false">RESUME</a></div></div></div></section></main><footer><div>GANESH U. / SOFTWARE DEVELOPER</div><div>ONE-FILE INTERACTIVE PORTFOLIO · 2026</div></footer>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script><script>
+if(window.gsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);window.addEventListener('error',()=>{ document.getElementById('loader')?.remove(); }, true);
+window.addEventListener('load',()=>{let n=0,t=setInterval(()=>{n+=Math.ceil(Math.random()*9);if(n>=100){n=100;clearInterval(t);setTimeout(()=>gsap.to('#loader',{yPercent:-100,duration:1,ease:'power4.inOut'}),220)}document.querySelector('#pct').textContent=String(n).padStart(2,'0')+'%';document.querySelector('.fill').style.width=n+'%'},55)});
+const c=document.querySelector('#cursor'),c2=document.querySelector('#cursor2');addEventListener('pointermove',e=>{gsap.to(c,{x:e.clientX,y:e.clientY,duration:.22});gsap.to(c2,{x:e.clientX,y:e.clientY,duration:.06})});document.querySelectorAll('a,.btn,.pill,.card').forEach(e=>{e.onmouseenter=()=>document.body.classList.add('hover');e.onmouseleave=()=>document.body.classList.remove('hover')});
+addEventListener('scroll',()=>{document.querySelector('#header').classList.toggle('scrolled',scrollY>35);document.querySelector('#progress').style.width=(scrollY/(document.documentElement.scrollHeight-innerHeight)*100)+'%'});
+gsap.from('.heroTitle span',{y:130,opacity:0,rotate:4,stagger:.12,duration:1.4,ease:'power4.out',delay:.65});gsap.from('.heroIn',{y:40,opacity:0,stagger:.13,duration:1,ease:'power3.out',delay:1});document.querySelectorAll('.reveal').forEach(e=>gsap.to(e,{opacity:1,y:0,duration:1.05,ease:'power4.out',scrollTrigger:{trigger:e,start:'top 86%',once:true}}));
+document.querySelectorAll('.magnetic').forEach(e=>{e.onpointermove=x=>{let r=e.getBoundingClientRect();gsap.to(e,{x:(x.clientX-r.left-r.width/2)*.14,y:(x.clientY-r.top-r.height/2)*.14,duration:.3})};e.onpointerleave=()=>gsap.to(e,{x:0,y:0,duration:.55,ease:'elastic.out(1,.5)'})});document.querySelectorAll('.tilt').forEach(e=>{e.onpointermove=x=>{let r=e.getBoundingClientRect(),a=(x.clientX-r.left)/r.width-.5,b=(x.clientY-r.top)/r.height-.5;gsap.to(e,{rotateY:a*7,rotateX:-b*6,transformPerspective:900,duration:.3})};e.onpointerleave=()=>gsap.to(e,{rotateY:0,rotateX:0,duration:.6})});
+const canvas=document.querySelector('#webgl'),scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,.1,100);camera.position.z=9;const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.setSize(innerWidth,innerHeight);const group=scene?new THREE.Group():null;if(group)scene.add(group);const orb=new THREE.Mesh(new THREE.IcosahedronGeometry(2.8,2),new THREE.MeshBasicMaterial({color:0x1746ff,wireframe:true,transparent:true,opacity:.12}));group.add(orb);const g=new THREE.BufferGeometry(),a=new Float32Array(1950);for(let i=0;i<650;i++){let r=5.5*Math.pow(Math.random(),.7),q=Math.random()*Math.PI*2;a[i*3]=Math.cos(q)*r;a[i*3+1]=Math.sin(q)*r;a[i*3+2]=(Math.random()-.5)*6}g.setAttribute('position',new THREE.BufferAttribute(a,3));const pts=new THREE.Points(g,new THREE.PointsMaterial({color:0xff6b35,size:.025,transparent:true,opacity:.7}));scene.add(pts);let mx=0,my=0;addEventListener('pointermove',e=>{mx=(e.clientX/innerWidth-.5)*.8;my=(e.clientY/innerHeight-.5)*.6});(function loop(){requestAnimationFrame(loop);orb.rotation.x+=.0015;orb.rotation.y+=.002;group.rotation.y+=(mx-group.rotation.y)*.018;group.rotation.x+=(-my-group.rotation.x)*.018;pts.rotation.y+=.0007;renderer.render(scene,camera)})();addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});if(window.gsap && group) gsap.to(group.rotation,{z:.7,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:1}});
+</script></body></html>
